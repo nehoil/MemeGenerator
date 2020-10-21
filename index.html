@@ -11,8 +11,14 @@
 <body onload="init()">
 
     <header>
+        <nav class="main-container">
         <div class="main-nav">
-            <nav>manu</nav>
+                <img src="img/logo.png" alt="">
+                <ul class="nav-list clean-list">
+                    <li>Gallery</li>
+                    <li>About</li>
+                </ul>
+            </nav>
         </div>
     </header>
     <div class="container">
@@ -20,6 +26,17 @@
             <div class="controls-container center">
                 <button onclick="onSwitch()">Swtich</button>
                 <button onclick="onRemove()">Delete</button>
+                <input type="color" name="" class="color-select" onchange="onFillColorChange(this.value)">
+                <select name="" class="font-select" onchange="onFontChange(this.value)">
+                    <option value="Impact">Impact</option> 
+                    <option value="Ariel">Ariel</option>
+                    <option value="Open Sans">Open Sans</option>                  
+                </select>
+                <select name="" class="font-select" onchange="onAlignChange(this.value)">
+                    <option value="center">Center</option> 
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>                  
+                </select>
                 <button onclick="onAddTxt()">Add +</button>
                 <button onclick="onTxtSizeChange(10)">Text +</button>
                 <button onclick="onTxtSizeChange(-10)">Text -</button>
@@ -39,7 +56,8 @@
         </div>
     </div>
     <footer>
-        <div class="footer-container container">Footer</div>
+        <div class="footer-container container"><img src="img/logo.png" alt="">
+        </div>
     </footer>
 
     <script src="js/meme-service.js"></script>

@@ -2,9 +2,9 @@
 
 
 // Todos:
-// 1. Improve the img delay issue (render txt after img is loaded by using .onload); 
-// Found Out if i can use the onload func on other func witout maxing two funcs into one.
-// 2. Improve removal func so will not remove lines if they're not selected.
+// 1. Fix on change align, rec is demaged.
+// 2. Fix removal func so will not remove lines if they're not selected.
+// 3. Change drawLine to receve on lines.
 
 var gCanvas;
 var gCtx;
@@ -14,7 +14,6 @@ var gDefault1LineLoc;
 var gDefault2LineLoc;
 var gDefaultLoc;
 var gDefaultTxt = 'ENTER TEXT HERE';
-var gText;
 
 function init() {
     gCanvas = document.querySelector('#my-canvas');
@@ -39,16 +38,23 @@ function renderCanvas() {
 }
 
 
-function drawTxt() {
-    var lines = getLines();
-    lines.forEach(line => {
-        drawText(line.txt, line.x, line.y, line.font, line.size, line.lineW, line.strokeColor, line.fillColor);
-        if (line.isFocus) drawRectAroundTxt(line.x, line.y)
-    });
-}
-
 
 /** On Funcs **/
+
+function onAlignChange(align){
+    alignChange(align);
+    renderCanvas();
+}
+
+function onFillColorChange(color){
+    changeFillColor(color);
+    renderCanvas();
+}
+
+function onFontChange(font){
+    changeFont(font);
+    renderCanvas();
+}
 
 function onAddTxt() {
     addLine(gDefaultTxt,gDefaultLoc);
@@ -91,14 +97,22 @@ function onLocChange(dir, diff) {
 
 /** Draws **/
 
+function drawTxt() {
+    var lines = getLines();
+    lines.forEach(line => {
+        drawText(line.txt, line.x, line.y, line.font, line.size, line.lineW, line.strokeColor, line.fillColor, line.align);
+        if (line.isFocus) drawRectAroundTxt(line.x, line.y)
+    });
+}
+
+
 function drawRectAroundTxt(x, y) {
     var selectedLine = getSelectedLine();
-    // console.log('selected', selectedLine);
-    var txtmeasue = gCtx.measureText(selectedLine.txt);
+    var txtMeasure = gCtx.measureText(selectedLine.txt);
+    console.log('txtMeasure', txtMeasure);
     var height = selectedLine.size * 1.286;
-    var yPos = y - height / 1.1;
-    gCtx.strokeRect(x - (txtmeasue.width / 2) - 5, yPos + 10, txtmeasue.width + 15, height - 5);
-
+    var yPos = y - height / 1.1 + 10;
+    gCtx.strokeRect(x - (txtMeasure.width/2), yPos,txtMeasure.width, height - 5);
 }
 
 
@@ -126,12 +140,12 @@ function drawImgFromEl(el) {
 }
 
 
-function drawText(text, x, y, font = defaultFont, size = defaultFontSize, lineW = 2, strokeColor = 'black', FillColor = 'white') {
+function drawText(text, x, y, font = defaultFont, size = defaultFontSize, lineW = 2, strokeColor = 'black', FillColor = 'white', txtAlign = 'center') {
     gCtx.strokeStyle = strokeColor;
     gCtx.fillStyle = FillColor;
     gCtx.lineWidth = lineW;
     gCtx.font = `${size}px ${font}`;
-    gCtx.textAlign = 'center';
+    gCtx.textAlign = txtAlign;
     gCtx.fillText(text, x, y);
     gCtx.strokeText(text, x, y);
 }

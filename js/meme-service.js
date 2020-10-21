@@ -44,7 +44,7 @@ var gMeme = {
             isFocus: false,
             txt: 'First Line Text',
             size: 48,
-            align: 'left',
+            align: 'center',
             lineW: 2,
             font: 'Impact',
             strokeColor: 'black',
@@ -57,7 +57,7 @@ var gMeme = {
             isFocus: false,
             txt: 'Second Line Text',
             size: 48,
-            align: 'left',
+            align: 'center',
             lineW: 2,
             font: 'Impact',
             strokeColor: 'black',
@@ -75,6 +75,19 @@ function switchSelectedLine(){
     }
 }
 
+function alignChange(lgn){
+    var line = gMeme.lines[gMeme.selectedLineIdx]
+    line.align = lgn;
+    if (lgn === 'left') line.x = 0;
+    if (lgn === 'right') line.x = gCanvas.width;
+    if (lgn === 'center') line.x = gCanvas.width/2;
+}
+
+function changeFont(newFont){
+    var line = gMeme.lines[gMeme.selectedLineIdx];
+    line.font = newFont;
+}
+
 function addLine(txt,loc){
     var {x,y} = loc
     var newLine = {
@@ -82,7 +95,7 @@ function addLine(txt,loc){
         isFocus: false,
         txt,
         size: 48,
-        align: 'left',
+        align: 'center',
         lineW: 2,
         font: 'Impact',
         strokeColor: 'black',
@@ -93,9 +106,12 @@ function addLine(txt,loc){
     gMeme.lines.push(newLine)
 }
 
+function changeFillColor(color){
+    gMeme.lines[gMeme.selectedLineIdx].fillColor = color;
+}
+
 function changeTxtSize(diff, id) {
-    var line = gMeme.lines.find(line => line.id === id);
-    line.size += diff;
+    gMeme.lines.find(line => line.id === id) += diff;
 }
 
 function removeLine(){
@@ -124,8 +140,7 @@ function changeTxtLoc(dir, diff) {
 }
 
 function changeTxt(txt) {
-    var line = gMeme.lines[gMeme.selectedLineIdx];
-    line.txt = txt;
+    gMeme.lines[gMeme.selectedLineIdx].txt = txt;
 }
 
 function changeImg(id) {
