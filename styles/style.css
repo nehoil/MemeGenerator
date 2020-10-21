@@ -76,6 +76,12 @@ canvas {
   border: 1px solid grey;
 }
 
+/* Gallery */
+
+.gallery-container img{
+    cursor: pointer;
+    width: 150px;
+}
 
 /* Footer */
 

@@ -3,44 +3,73 @@
 var gCanvas;
 var gCtx;
 var defaultFontSize = 48;
+var defaultFont = 'Impact';
+var gDefault1LineLoc;
+var gDefault2LineLoc;
 
 function init() {
     gCanvas = document.querySelector('#my-canvas');
     gCtx = gCanvas.getContext('2d');
-    drawImg();
+    gDefault1LineLoc = { x: gCanvas.width / 2, y: defaultFontSize };
+    gDefault2LineLoc = { x: gCanvas.width / 2, y: gCanvas.height - 20 };
+    renderCanvas()
+}
+
+
+/** Render Funcs **/
+
+function renderCanvas() {
+    var selectedImg = getSelectedImgUrl();
+    var lines = getLines();
+    drawImgFromSrc(selectedImg);
     setTimeout(() => {
-        drawText(getMemeText(), gCanvas.width/2, defaultFontSize);
+        lines.forEach(line => {
+            drawText(line.txt, line.x, line.y, line.font, line.size, line.lineW, line.strokeColor, line.FillColor);
+        })
     }, 50);
 }
 
-function drawImg() {
+
+/** On Funcs **/
+
+function onTextChange(txt) {
+    renderCanvas()
+    setTimeout(() => {
+        drawText(txt, gCanvas.width / 2, defaultFontSize);
+    }, 50);
+}
+
+function onImgChange(el,id) {
+    changeImg(id);
+    renderCanvas();
+}
+
+
+/** Draws **/
+
+function drawImgFromSrc(imgSrc = './img/1.jpg') {
     var img = new Image()
-    img.src = './img/1.jpg';
+    img.src = imgSrc;
     img.onload = () => {
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height)
     }
 }
 
-function renderCanvas(){
-    drawImg();
+function drawImgFromEl(el) {
+    gCtx.drawImage(el, 0, 0, gCanvas.width, gCanvas.height)
 }
 
-function onTextChange(txt){
-    renderCanvas()
-    setTimeout(() => {
-        drawText(txt, gCanvas.width/2, defaultFontSize);
-    }, 50);
+
+function drawText(text, x, y, font = defaultFont, size = defaultFontSize, lineW = 2, strokeColor = 'black', FillColor = 'white') {
+    gCtx.strokeStyle = strokeColor;
+    gCtx.fillStyle = FillColor;
+    gCtx.lineWidth = lineW;
+    gCtx.font = `${size}px ${font}`;
+    gCtx.textAlign = 'center';
+    gCtx.fillText(text, x, y);
+    gCtx.strokeText(text, x, y);
 }
 
-function drawText(text, x, y) {
-    gCtx.strokeStyle = 'black'
-    gCtx.fillStyle = 'white'
-    gCtx.lineWidth = '2'
-    gCtx.font = '48px Impact'
-    gCtx.textAlign = 'center'
-    gCtx.fillText(text, x, y)
-    gCtx.strokeText(text, x, y)
-}
 
 function drawLine(x, y, xEnd = 250, yEnd = 250) {
     gCtx.beginPath()

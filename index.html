@@ -16,7 +16,6 @@
         </div>
     </header>
     <div class="container">
-        <div class="gallery-container"></div>
         <div class="editor-container">
             <div class="controls-container center">
                 <input type="text" placeholder="Your Text" onkeydown="onTextChange(this.value)">
@@ -24,6 +23,10 @@
             <div class="canvas-container">
                 <canvas id="my-canvas" height="450" width="450"></canvas>
             </div>
+        </div>
+        <div class="gallery-container center">
+            <img src="img/1.jpg" alt="" onclick="onImgChange(this,1)">
+            <img src="img/2.jpg" alt="" onclick="onImgChange(this,2)">
         </div>
     </div>
     <footer>
