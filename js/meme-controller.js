@@ -66,13 +66,13 @@ function onImgChange(el, id) {
     renderCanvas();
 }
 
-function onTxtSizeChange(diff, id = 1) {
-    changeTxtSize(diff, id);
+function onTxtSizeChange(diff) {
+    changeTxtSize(diff);
     renderCanvas();
 }
 
-function onLocChange(dir, diff, id = 1) {
-    changeTxtLoc(dir, diff, id);
+function onLocChange(dir, diff) {
+    changeTxtLoc(dir, diff);
     renderCanvas();
 }
 

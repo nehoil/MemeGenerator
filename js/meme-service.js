@@ -80,8 +80,8 @@ function changeTxtSize(diff, id) {
     line.size += diff;
 }
 
-function changeTxtLoc(dir, diff, id) {
-    var line = gMeme.lines.find(line => line.id === id);
+function changeTxtLoc(dir, diff) {
+    var line = getSelectedLine();
     var changeDir;
     switch (dir) {
         case 'left':
@@ -108,8 +108,8 @@ function changeTxt(txt) {
 function changeImg(id) {
     gMeme.selectedImgId = id;
 }
-function changeTxtSize(diff, id) {
-    var line = gMeme.lines.find(line => line.id === id);
+function changeTxtSize(diff) {
+    var line = getSelectedLine();
     line.size = line.size + diff;
 }
 
