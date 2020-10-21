@@ -32,11 +32,9 @@ function renderCanvas() {
 
 /** On Funcs **/
 
-function onTextChange(txt) {
-    renderCanvas()
-    setTimeout(() => {
-        drawText(txt, gCanvas.width / 2, defaultFontSize);
-    }, 50);
+function onTextChange(txt,id=1) {
+    changeTxt(txt,id);
+    renderCanvas();
 }
 
 function onImgChange(el,id) {
@@ -44,6 +42,15 @@ function onImgChange(el,id) {
     renderCanvas();
 }
 
+function onTxtSizeChange(diff,id=1){
+    changeTxtSize(diff,id);
+    renderCanvas();
+}
+
+function onLocChange(dir,diff,id=1){
+    changeTxtLoc(dir,diff,id);
+    renderCanvas();
+}
 
 /** Draws **/
 

@@ -18,6 +18,12 @@
     <div class="container">
         <div class="editor-container">
             <div class="controls-container center">
+                <button onclick="onTxtSizeChange(10)">Text +</button>
+                <button onclick="onTxtSizeChange(-10)">Text -</button>
+                <button onclick="onLocChange('right',10)">Move Right</button>
+                <button onclick="onLocChange('left',-10)">Move Left</button>
+                <button onclick="onLocChange('up',-10)">Move Up</button>
+                <button onclick="onLocChange('down',10)">Move Down</button>
                 <input type="text" placeholder="Your Text" onkeydown="onTextChange(this.value)">
             </div>
             <div class="canvas-container">

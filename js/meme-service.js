@@ -40,8 +40,10 @@ var gMeme = {
 
     lines: [
         {
+            id: 1,
             txt: 'I never eat Falafel',
-            size: 48, align: 'left',
+            size: 48,
+            align: 'left',
             color: 'red',
             lineW: 2,
             font: 'Impact',
@@ -49,24 +51,46 @@ var gMeme = {
             fillColor: 'white',
             x: 225,
             y: 48
-        },
-        // {
-        //     txt: 'Until.. on vacation!',
-        //     size: 48, align: 'left',
-        //     color: 'red',
-        //     lineW: 2,
-        //     font: 'Impact',
-        //     strokeColor: 'black',
-        //     fillColor: 'white',
-        //     x: 225,
-        //     y: 425
-        // }
+        }
     ]
 };
 
+function changeTxtSize(diff, id) {
+    var line = gMeme.lines.find(line => line.id === id);
+    line.size += diff;
+}
+
+function changeTxtLoc(dir, diff, id) {
+    var line = gMeme.lines.find(line => line.id === id);
+    var changeDir;
+    switch (dir) {
+        case 'left':
+            changeDir = 'x';
+            break;
+        case 'right':
+            changeDir = 'x';
+            break;
+        case 'down':
+            changeDir = 'y';
+            break;
+        case 'up':
+            changeDir = 'y';
+            break;
+    }
+    line[changeDir] += diff;
+}
+
+function changeTxt(txt, id) {
+    var line = gMeme.lines.find(line => line.id === id);
+    line.txt = txt;
+}
 
 function changeImg(id) {
     gMeme.selectedImgId = id;
+}
+function changeTxtSize(diff, id) {
+    var line = gMeme.lines.find(line => line.id === id);
+    line.size = line.size + diff;
 }
 
 function getMemeText() {
