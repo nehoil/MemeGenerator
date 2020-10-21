@@ -4,7 +4,7 @@
 // Todos:
 // 1. Improve the img delay issue (render txt after img is loaded by using .onload); 
 // Found Out if i can use the onload func on other func witout maxing two funcs into one.
-// 2. 
+// 2. Improve removal func so will not remove lines if they're not selected.
 
 var gCanvas;
 var gCtx;
@@ -12,6 +12,8 @@ var defaultFontSize = 48;
 var defaultFont = 'Impact';
 var gDefault1LineLoc;
 var gDefault2LineLoc;
+var gDefaultLoc;
+var gDefaultTxt = 'ENTER TEXT HERE';
 var gText;
 
 function init() {
@@ -19,6 +21,7 @@ function init() {
     gCtx = gCanvas.getContext('2d');
     gDefault1LineLoc = { x: gCanvas.width / 2, y: defaultFontSize };
     gDefault2LineLoc = { x: gCanvas.width / 2, y: gCanvas.height - 20 };
+    gDefaultLoc = { x: gCanvas.width / 2, y: gCanvas.height/2};
     renderCanvas()
 }
 
@@ -27,16 +30,14 @@ function init() {
 
 function renderCanvas() {
     var selectedImg = getSelectedImgUrl();
-    drawImgFromSrc(selectedImg);
-    function drawImgFromSrc(imgSrc = './img/1.jpg') {
-        var img = new Image()
-        img.src = imgSrc;
-        img.onload = () => {
-            gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
-            drawTxt();
-        }
+    var img = new Image()
+    img.src = selectedImg;
+    img.onload = () => {
+        gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
+        drawTxt();
     }
 }
+
 
 function drawTxt() {
     var lines = getLines();
@@ -49,10 +50,21 @@ function drawTxt() {
 
 /** On Funcs **/
 
+function onAddTxt() {
+    addLine(gDefaultTxt,gDefaultLoc);
+    renderCanvas();
+}
+
+function onRemove() {
+    // prepare in the near future for other sort of removals.
+    removeLine();
+    renderCanvas();
+}
+
 function onSwitch() {
+    var prevLine = getSelectedLine().isFocus = false;
     switchSelectedLine();
-    var line = getSelectedLine();
-    line.isFocus = true;
+    var line = getSelectedLine().isFocus = true;
     renderCanvas()
 }
 
@@ -86,6 +98,7 @@ function drawRectAroundTxt(x, y) {
     var height = selectedLine.size * 1.286;
     var yPos = y - height / 1.1;
     gCtx.strokeRect(x - (txtmeasue.width / 2) - 5, yPos + 10, txtmeasue.width + 15, height - 5);
+
 }
 
 

@@ -1,13 +1,13 @@
 'use strict';
 
 var gKeywords = { 'happy': 12, 'funny puk': 1 };
-var gNextId = 1;
+var gNextId = 2;
 var gImgs = [
     {
-        id: 1, url: 'img/2.jpg', keywords: ['happy']
+        id: 1, url: 'img/1.jpg', keywords: ['happy']
     },
     {
-        id: 2, url: 'img/1.jpg', keywords: ['happy']
+        id: 2, url: 'img/2.jpg', keywords: ['happy']
     },
     {
         id: 3, url: 'img/3.jpg', keywords: ['happy']
@@ -75,9 +75,32 @@ function switchSelectedLine(){
     }
 }
 
+function addLine(txt,loc){
+    var {x,y} = loc
+    var newLine = {
+        id: gNextId++,
+        isFocus: false,
+        txt,
+        size: 48,
+        align: 'left',
+        lineW: 2,
+        font: 'Impact',
+        strokeColor: 'black',
+        fillColor: 'white',
+        x,
+        y
+    }
+    gMeme.lines.push(newLine)
+}
+
 function changeTxtSize(diff, id) {
     var line = gMeme.lines.find(line => line.id === id);
     line.size += diff;
+}
+
+function removeLine(){
+    if (!gMeme.lines.length) return;
+    gMeme.lines.splice(gMeme.selectedLineIdx, 1)
 }
 
 function changeTxtLoc(dir, diff) {
