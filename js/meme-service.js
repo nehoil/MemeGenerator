@@ -1,7 +1,7 @@
 'use strict';
 
 var gKeywords = { 'happy': 12, 'funny puk': 1 };
-
+var gNextId = 1;
 var gImgs = [
     {
         id: 1, url: 'img/1.jpg', keywords: ['happy']
@@ -41,19 +41,37 @@ var gMeme = {
     lines: [
         {
             id: 1,
-            txt: 'I never eat Falafel',
+            txt: 'First Line Text',
             size: 48,
             align: 'left',
-            color: 'red',
             lineW: 2,
             font: 'Impact',
             strokeColor: 'black',
             fillColor: 'white',
             x: 225,
             y: 48
+        },
+        {
+            id: 2,
+            txt: 'Second Line Text',
+            size: 48,
+            align: 'left',
+            lineW: 2,
+            font: 'Impact',
+            strokeColor: 'black',
+            fillColor: 'white',
+            x: 225,
+            y: 435
         }
     ]
 };
+
+function switchSelectedLine(){
+    if (gMeme.selectedLineIdx >= gMeme.lines.length-1) gMeme.selectedLineIdx = 0;
+    else{
+        gMeme.selectedLineIdx++
+    }
+}
 
 function changeTxtSize(diff, id) {
     var line = gMeme.lines.find(line => line.id === id);
@@ -80,8 +98,8 @@ function changeTxtLoc(dir, diff, id) {
     line[changeDir] += diff;
 }
 
-function changeTxt(txt, id) {
-    var line = gMeme.lines.find(line => line.id === id);
+function changeTxt(txt) {
+    var line = gMeme.lines[gMeme.selectedLineIdx];
     line.txt = txt;
 }
 
@@ -93,8 +111,11 @@ function changeTxtSize(diff, id) {
     line.size = line.size + diff;
 }
 
-function getMemeText() {
-    return gMeme.lines[0].txt;
+function getMemeTextByIdx(idx) {
+    return gMeme.lines[idx].txt;
+}
+function getSelectedLine() {
+    return gMeme.lines[gMeme.selectedLineIdx];
 }
 function getSelectedImgUrl() {
     var img = gImgs.find(img => img.id === gMeme.selectedImgId)

@@ -32,30 +32,32 @@ function draw() {
     var selectedImg = getSelectedImgUrl();
     var lines = getLines();
     drawImgFromSrc(selectedImg);
-    function drawImgFromSrc(imgSrc = './img/1.jpg') {
-        var img = new Image()
-        img.src = imgSrc;
-        img.onload = () => {
-            gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height)
-            lines.forEach(line => {
-                drawText(line.txt, line.x, line.y, line.font, line.size, line.lineW, line.strokeColor, line.fillColor);
-            });
-        }
+    setTimeout(() => {
+        lines.forEach(line => {
+            drawText(line.txt, line.x, line.y, line.font, line.size, line.lineW, line.strokeColor, line.fillColor);
+        })
+    }, 50);
+
+function drawImgFromSrc(imgSrc = './img/1.jpg') {
+    var img = new Image()
+    img.src = imgSrc;
+    img.onload = () => {
+        gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height)
     }
 }
-
+}
 
 /** On Funcs **/
 
 function onSwitch() {
     switchSelectedLine();
     var line = getSelectedLine();
-    var { x, y } = line;
+    var {x,y} = line;
     drawGlowingText(line.txt, x, y, "#FF0000", 10);
     // renderCanvas();
 }
 
-function onTextChange(txt) {
+function onTextChange(txt) { 
     changeTxt(txt);
     renderCanvas();
 }
