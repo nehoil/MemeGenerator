@@ -4,10 +4,10 @@ var gKeywords = { 'happy': 12, 'funny puk': 1 };
 var gNextId = 1;
 var gImgs = [
     {
-        id: 1, url: 'img/1.jpg', keywords: ['happy']
+        id: 1, url: 'img/2.jpg', keywords: ['happy']
     },
     {
-        id: 2, url: 'img/2.jpg', keywords: ['happy']
+        id: 2, url: 'img/1.jpg', keywords: ['happy']
     },
     {
         id: 3, url: 'img/3.jpg', keywords: ['happy']
@@ -41,6 +41,7 @@ var gMeme = {
     lines: [
         {
             id: 1,
+            isFocus: false,
             txt: 'First Line Text',
             size: 48,
             align: 'left',
@@ -53,6 +54,7 @@ var gMeme = {
         },
         {
             id: 2,
+            isFocus: false,
             txt: 'Second Line Text',
             size: 48,
             align: 'left',

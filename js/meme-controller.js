@@ -12,6 +12,7 @@ var defaultFontSize = 48;
 var defaultFont = 'Impact';
 var gDefault1LineLoc;
 var gDefault2LineLoc;
+var gText;
 
 function init() {
     gCanvas = document.querySelector('#my-canvas');
@@ -25,23 +26,24 @@ function init() {
 /** Render Funcs **/
 
 function renderCanvas() {
-    draw()
-}
-
-function draw() {
     var selectedImg = getSelectedImgUrl();
-    var lines = getLines();
     drawImgFromSrc(selectedImg);
     function drawImgFromSrc(imgSrc = './img/1.jpg') {
         var img = new Image()
         img.src = imgSrc;
         img.onload = () => {
-            gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height)
-            lines.forEach(line => {
-                drawText(line.txt, line.x, line.y, line.font, line.size, line.lineW, line.strokeColor, line.fillColor);
-            });
+            gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
+            drawTxt();
         }
     }
+}
+
+function drawTxt() {
+    var lines = getLines();
+    lines.forEach(line => {
+        drawText(line.txt, line.x, line.y, line.font, line.size, line.lineW, line.strokeColor, line.fillColor);
+        if (line.isFocus) drawRectAroundTxt(line.x, line.y)
+    });
 }
 
 
@@ -50,9 +52,8 @@ function draw() {
 function onSwitch() {
     switchSelectedLine();
     var line = getSelectedLine();
-    var { x, y } = line;
-    drawGlowingText(line.txt, x, y, "#FF0000", 10);
-    // renderCanvas();
+    line.isFocus = true;
+    renderCanvas()
 }
 
 function onTextChange(txt) {
@@ -77,14 +78,33 @@ function onLocChange(dir, diff, id = 1) {
 
 
 /** Draws **/
+
+function drawRectAroundTxt(x, y) {
+    var selectedLine = getSelectedLine();
+    // console.log('selected', selectedLine);
+    var txtmeasue = gCtx.measureText(selectedLine.txt);
+    var height = selectedLine.size * 1.286;
+    var yPos = y - height / 1.1;
+    gCtx.strokeRect(x - (txtmeasue.width / 2) - 5, yPos + 10, txtmeasue.width + 15, height - 5);
+}
+
+
+function drawRect(x, y) {
+    gCtx.beginPath()
+    gCtx.rect(x, y, 150, 150)
+    gCtx.strokeStyle = 'black'
+    gCtx.stroke()
+    gCtx.fillStyle = 'orange'
+    gCtx.fillRect(x, y, 150, 150)
+}
+
 function drawGlowingText(text, x, y, glowColorHexString, glowDistance = 10) {
     gCtx.save();
     gCtx.shadowBlur = glowDistance;
     gCtx.shadowColor = glowColorHexString;
     gCtx.strokeText(text, x, y);
     for (let i = 0; i < 3; i++)
-        gCtx.fillText(text, x, y); //seems to be washed out without 3 fills
-
+        gCtx.fillText(text, x, y);
     gCtx.restore();
 }
 
@@ -112,3 +132,7 @@ function drawLine(x, y, xEnd = 250, yEnd = 250) {
     gCtx.stroke()
 
 }
+
+/* test codes */
+
+
