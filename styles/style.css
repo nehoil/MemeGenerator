@@ -1,0 +1,95 @@
+* {
+  box-sizing: border-box;
+}
+
+/* Fontface */
+
+/* @font-face {
+  font-family: lato;
+  src: url(/fonts/lato/Lato-Regular.ttf);
+} */
+
+/* BASIC */
+
+html {
+  font-family: lato, serif;
+  color: #606060;
+}
+
+body {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+button {
+  font-family: lato, serif;
+  outline: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+h6 {
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  display: flex;
+}
+
+/* Layout */
+
+.main-container {
+    width: 1100px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+/* Header */
+
+header {
+    background-color: rgb(253, 166, 107);
+}
+
+.main-nav {
+    width: 100%;
+    text-align: center;
+    margin: auto;
+}
+
+/* Meme Editor */
+
+.canvas-container {
+    width: 100%;
+    text-align: center;
+    margin: auto;
+}
+
+canvas {
+  display: block;
+  margin: 20px auto;
+  border: 1px solid grey;
+}
+
+
+/* Footer */
+
+footer {
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    background-color: rgb(253, 166, 107);
+}
+
+/* Helpers */
+
+.center {
+    width: 100%;
+    text-align: center;
+    margin: auto;
+}
