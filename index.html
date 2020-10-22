@@ -6,57 +6,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meme Generator</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
 <body onload="init()">
 
     <header>
         <nav class="main-container">
-        <div class="main-nav">
+            <div class="main-nav">
                 <img src="img/logo.png" alt="">
                 <ul class="nav-list clean-list">
-                    <li>Gallery</li>
+                    <li class="gallery-btn" onclick="onGalleryClick()">Gallery</li>
                     <li>About</li>
                 </ul>
-            </nav>
+        </nav>
         </div>
     </header>
     <div class="container">
-        <div class="editor-container">
-            <div class="controls-container center">
-                <button onclick="onSwitch()">Swtich</button>
-                <button onclick="onRemove()">Delete</button>
-                <input type="color" name="" class="color-select" onchange="onFillColorChange(this.value)">
-                <select name="" class="font-select" onchange="onFontChange(this.value)">
-                    <option value="Impact">Impact</option> 
-                    <option value="Ariel">Ariel</option>
-                    <option value="Open Sans">Open Sans</option>                  
-                </select>
-                <select name="" class="font-select" onchange="onAlignChange(this.value)">
-                    <option value="center">Center</option> 
-                    <option value="left">Left</option>
-                    <option value="right">Right</option>                  
-                </select>
-                <button onclick="onAddTxt()">Add +</button>
-                <button onclick="onTxtSizeChange(10)">Text +</button>
-                <button onclick="onTxtSizeChange(-10)">Text -</button>
-                <button onclick="onLocChange('right',10)">Move Right</button>
-                <button onclick="onLocChange('left',-10)">Move Left</button>
-                <button onclick="onLocChange('up',-10)">Move Up</button>
-                <button onclick="onLocChange('down',10)">Move Down</button>
-                <input type="text" placeholder="Your Text" onkeydown="onTextChange(this.value)">
+        <div class="search-header">
+            <div class="search-content main-container">
+                <div class="search-container">
+                    <input type="text" placeholder="Enter search keyword">
+                </div>
+                <div class="keywords-container">
+                    <p>funny comics dogs books  <a href="#"> more..</a></p>
+                </div>
             </div>
+            </div>
+        <div class="editor-container main-container hide">
             <div class="canvas-container">
-                <canvas id="my-canvas" height="450" width="450"></canvas>
+                <canvas id="my-canvas" height="540" width="540"></canvas>
+            </div>
+            <div class="controls-container center">
+                <div class="text-input-container">
+                    <input type="text" class="text-input" placeholder="Your Text" onkeydown="onTextChange(this.value)">
+                </div>
+                <div class="swith-add-del-contianer">
+                    <button class="switch-btn" onclick="onSwitch()">↑ ↓</button>
+                    <button class="delete-btn" onclick="onRemove()">Delete</button>
+                    <button class="add-btn" onclick="onAddTxt()">Add +</button>
+                </div>
+                <div class="txt-size-alings-container">
+                    <button class="text-increase-btn" onclick="onTxtSizeChange(10)">Text +</button>
+                    <button class="text-decrease-btn" onclick="onTxtSizeChange(-10)">Text -</button>
+                    <select name="" class="align-select" onchange="onAlignChange(this.value)">
+                        <option value="center">Center</option>
+                        <option value="left">Left</option>
+                        <option value="right">Right</option>
+                    </select>
+                </div>
+                <div class="font-color-w-container">
+                    <input type="color" name="" class="color-input" onchange="onFillColorChange(this.value)">
+                    <select name="" class="font-select" onchange="onFontChange(this.value)">
+                        <option value="Impact">Impact</option>
+                        <option value="Ariel">Ariel</option>
+                        <option value="Open Sans">Open Sans</option>
+                    </select>
+                </div>
+                <div class="move-container">
+                    <button class="text-left-btn" onclick="onLocChange('left',-10)">←</button>
+                    <button class="text-right-btn" onclick="onLocChange('right',10)">→</button>
+                    <button class="text-up-btn" onclick="onLocChange('up',-10)">↑</button>
+                    <button class="text-down-btn" onclick="onLocChange('down',10)">↓</button>
+                </div>
+                <div class="stickers-container"></div>
+                <div class="share-container"></div>
             </div>
         </div>
-        <div class="gallery-container center">
-            <img src="img/1.jpg" alt="" onclick="onImgChange(this,1)">
-            <img src="img/2.jpg" alt="" onclick="onImgChange(this,2)">
+        <div class="gallery-container center main-container">
+            <img src="img/1.jpg" alt="" onclick="onImgClick(this,1)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
+            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
         </div>
     </div>
     <footer>
         <div class="footer-container container"><img src="img/logo.png" alt="">
+            <span>all rights reserved 2020</span>
         </div>
     </footer>
 

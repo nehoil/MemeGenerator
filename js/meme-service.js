@@ -68,28 +68,39 @@ var gMeme = {
     ]
 };
 
-function switchSelectedLine(){
-    if (gMeme.selectedLineIdx >= gMeme.lines.length-1) gMeme.selectedLineIdx = 0;
-    else{
+function switchSelectedLine() {
+    if (gMeme.selectedLineIdx >= gMeme.lines.length - 1) gMeme.selectedLineIdx = 0;
+    else {
         gMeme.selectedLineIdx++
     }
 }
 
-function alignChange(lgn){
-    var line = gMeme.lines[gMeme.selectedLineIdx]
-    line.align = lgn;
-    if (lgn === 'left') line.x = 0;
-    if (lgn === 'right') line.x = gCanvas.width;
-    if (lgn === 'center') line.x = gCanvas.width/2;
+function changeLinesToDefault(){
+    for (let i = 0; i < 2; i++) { gDefault1LineLoc
+        gMeme.lines[0].y = gDefault1LineLoc.y;
+        gMeme.lines[0].x = gDefault1LineLoc.x;
+        gMeme.lines[1].y = gDefault2LineLoc.y;
+        gMeme.lines[1].x = gDefault2LineLoc.x;
+    }
 }
 
-function changeFont(newFont){
+function alignChange(lgn) {
+    var line = gMeme.lines[gMeme.selectedLineIdx]
+    // line.align = lgn;
+    var txtWidth = gCtx.measureText(line.txt).width;
+    console.log(txtWidth);
+    if (lgn === 'left') line.x = 0 + txtWidth / 2;
+    if (lgn === 'right') line.x = gCanvas.width - txtWidth / 2;
+    if (lgn === 'center') line.x = gCanvas.width / 2;
+}
+
+function changeFont(newFont) {
     var line = gMeme.lines[gMeme.selectedLineIdx];
     line.font = newFont;
 }
 
-function addLine(txt,loc){
-    var {x,y} = loc
+function addLine(txt, loc) {
+    var { x, y } = loc
     var newLine = {
         id: gNextId++,
         isFocus: false,
@@ -106,7 +117,7 @@ function addLine(txt,loc){
     gMeme.lines.push(newLine)
 }
 
-function changeFillColor(color){
+function changeFillColor(color) {
     gMeme.lines[gMeme.selectedLineIdx].fillColor = color;
 }
 
@@ -114,7 +125,7 @@ function changeTxtSize(diff, id) {
     gMeme.lines.find(line => line.id === id) += diff;
 }
 
-function removeLine(){
+function removeLine() {
     if (!gMeme.lines.length) return;
     gMeme.lines.splice(gMeme.selectedLineIdx, 1)
 }
@@ -136,7 +147,15 @@ function changeTxtLoc(dir, diff) {
             changeDir = 'y';
             break;
     }
+    if (isOutOfCanvas(dir, line)) return;
     line[changeDir] += diff;
+}
+
+function isOutOfCanvas(dir, line) {
+    var txtWidth = gCtx.measureText(line.txt).width;
+    if (dir === 'right' && line.x + txtWidth / 2 > gCanvas.width - 4) return true;
+    if (dir === 'right' && line.x - txtWidth / 2 < 4) return true;
+    return false;
 }
 
 function changeTxt(txt) {

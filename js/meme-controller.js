@@ -5,6 +5,7 @@
 // 1. Fix on change align, rec is demaged.
 // 2. Fix removal func so will not remove lines if they're not selected.
 // 3. Change drawLine to receve on lines.
+// 4. Chnage line 77 on meme-service to work with construction or find a work-around. (preffered)
 
 var gCanvas;
 var gCtx;
@@ -19,8 +20,9 @@ function init() {
     gCanvas = document.querySelector('#my-canvas');
     gCtx = gCanvas.getContext('2d');
     gDefault1LineLoc = { x: gCanvas.width / 2, y: defaultFontSize };
-    gDefault2LineLoc = { x: gCanvas.width / 2, y: gCanvas.height - 20 };
-    gDefaultLoc = { x: gCanvas.width / 2, y: gCanvas.height/2};
+    gDefault2LineLoc = { x: gCanvas.width / 2, y: gCanvas.height - 10 };
+    changeLinesToDefault();
+    gDefaultLoc = { x: gCanvas.width / 2, y: gCanvas.height / 2 };
     renderCanvas()
 }
 
@@ -41,23 +43,34 @@ function renderCanvas() {
 
 /** On Funcs **/
 
-function onAlignChange(align){
+function onGalleryClick() {
+    document.querySelector('.gallery-container').classList.remove('hide')
+    document.querySelector('.editor-container').classList.add('hide')
+}
+
+function onImgClick(el,id) {
+    document.querySelector('.editor-container').classList.toggle('hide')
+    document.querySelector('.gallery-container').classList.toggle('hide')
+    onImgChange(el,id)
+}
+
+function onAlignChange(align) {
     alignChange(align);
     renderCanvas();
 }
 
-function onFillColorChange(color){
+function onFillColorChange(color) {
     changeFillColor(color);
     renderCanvas();
 }
 
-function onFontChange(font){
+function onFontChange(font) {
     changeFont(font);
     renderCanvas();
 }
 
 function onAddTxt() {
-    addLine(gDefaultTxt,gDefaultLoc);
+    addLine(gDefaultTxt, gDefaultLoc);
     renderCanvas();
 }
 
@@ -112,7 +125,7 @@ function drawRectAroundTxt(x, y) {
     console.log('txtMeasure', txtMeasure);
     var height = selectedLine.size * 1.286;
     var yPos = y - height / 1.1 + 10;
-    gCtx.strokeRect(x - (txtMeasure.width/2), yPos,txtMeasure.width, height - 5);
+    gCtx.strokeRect(x - (txtMeasure.width / 2) - 10, yPos, txtMeasure.width + 20, height - 6);
 }
 
 
