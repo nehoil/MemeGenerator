@@ -4,7 +4,7 @@
 // Todos:
 // 1. Fix on change align, rec is demaged.
 // 2. Fix removal func so will not remove lines if they're not selected.
-// 3. Change drawLine to receve on lines.
+// 3. Change drawLine to recieve lines.
 // 4. Chnage line 77 on meme-service to work with construction or find a work-around. (preffered)
 
 var gCanvas;
@@ -17,13 +17,15 @@ var gDefaultLoc;
 var gDefaultTxt = 'ENTER TEXT HERE';
 
 function init() {
+    if (!gUserMemes.length) gUserMemes = loadFromStorage(STORAGE_MEMES_KEY)
     gCanvas = document.querySelector('#my-canvas');
     gCtx = gCanvas.getContext('2d');
     gDefault1LineLoc = { x: gCanvas.width / 2, y: defaultFontSize };
     gDefault2LineLoc = { x: gCanvas.width / 2, y: gCanvas.height - 10 };
     changeLinesToDefault();
     gDefaultLoc = { x: gCanvas.width / 2, y: gCanvas.height / 2 };
-    renderCanvas()
+    renderCanvas();
+    renderGallery();
 }
 
 
@@ -39,19 +41,61 @@ function renderCanvas() {
     }
 }
 
+function renderGallery() {
+    var strHtmls = getImgs().map(img => {
+        return `
+        <img src="img/${img.id}.jpg" alt="" onclick="onImgClick(this,${img.id})">`
+    }).join('');
+    document.querySelector('.gallery-container').innerHTML = strHtmls;
+}
 
+
+function renderMemes() {
+    var memes = loadFromStorage(STORAGE_MEMES_KEY)
+    var strHtmls;
+    if (!memes) strHtmls = 'No Memes Saved Yet..!'
+    else {
+        var strHtmls = memes.map(meme => {
+            return `<a href="#" onclick="onDownloadMeme(this,${meme.id})" download="my-img.jpg"><img src="${meme.img}" alt=""></a>`}).join('');
+        }
+    document.querySelector('.memes-container').innerHTML = strHtmls
+}
 
 /** On Funcs **/
 
-function onGalleryClick() {
-    document.querySelector('.gallery-container').classList.remove('hide')
-    document.querySelector('.editor-container').classList.add('hide')
+
+function onDownloadMeme(elLink,id) {
+    var memeImg = gUserMemes.find(meme => meme.id === id).img
+    elLink.href = memeImg;
 }
 
-function onImgClick(el,id) {
-    document.querySelector('.editor-container').classList.toggle('hide')
-    document.querySelector('.gallery-container').classList.toggle('hide')
-    onImgChange(el,id)
+function onDownload(elLink) {
+    var imgContent = gCanvas.toDataURL('image/jpeg');
+    elLink.href = imgContent;
+}
+
+function onSave() {
+    var imgContent = gCanvas.toDataURL('image/jpeg');
+    saveMeme(imgContent)
+}
+
+function onGalleryClick() {
+    document.querySelector('.gallery-container').classList.remove('hide');
+    document.querySelector('.memes-container').classList.add('hide');
+    document.querySelector('.editor-container').classList.add('hide');
+}
+
+function onMemesClick() {
+    document.querySelector('.memes-container').classList.remove('hide');
+    document.querySelector('.gallery-container').classList.add('hide');
+    document.querySelector('.editor-container').classList.add('hide');
+    renderMemes()
+}
+
+function onImgClick(el, id) {
+    document.querySelector('.editor-container').classList.toggle('hide');
+    document.querySelector('.gallery-container').classList.toggle('hide');
+    onImgChange(el, id)
 }
 
 function onAlignChange(align) {

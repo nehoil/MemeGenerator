@@ -1,7 +1,11 @@
 'use strict';
 
+const STORAGE_MEMES_KEY = 'memesDB';
+
 var gKeywords = { 'happy': 12, 'funny puk': 1 };
 var gNextId = 2;
+var gMemeNextId = 1;
+var gUserMemes = [];
 var gImgs = [
     {
         id: 1, url: 'img/1.jpg', keywords: ['happy']
@@ -68,6 +72,51 @@ var gMeme = {
     ]
 };
 
+
+/* Get Funcs */
+
+function getImgs() {
+    return gImgs;
+}
+
+function getMemeTextByIdx(idx) {
+    return gMeme.lines[idx].txt;
+}
+function getSelectedLine() {
+    return gMeme.lines[gMeme.selectedLineIdx];
+}
+function getSelectedImgUrl() {
+    var img = gImgs.find(img => img.id === gMeme.selectedImgId);
+    return img.url;
+}
+
+function getImgUrlById(id) {
+    return gImgs.find(img => img.id === gMeme[id]);
+}
+
+function getLines() {
+    return gMeme.lines;
+}
+
+/* General Funcs */
+
+function isOutOfCanvas(dir, line) {
+    var txtWidth = gCtx.measureText(line.txt).width;
+    if (dir === 'right' && line.x + txtWidth / 2 > gCanvas.width - 4) return true;
+    if (dir === 'right' && line.x - txtWidth / 2 < 4) return true;
+    return false;
+}
+
+/* User Memes Funcs */
+
+function saveMeme(img) {
+    var meme = { img, id: gMemeNextId++ };
+    gUserMemes.push(meme);
+    saveToStorage(STORAGE_MEMES_KEY, gUserMemes);
+}
+
+/* Change Model Funcs */
+
 function switchSelectedLine() {
     if (gMeme.selectedLineIdx >= gMeme.lines.length - 1) gMeme.selectedLineIdx = 0;
     else {
@@ -75,8 +124,9 @@ function switchSelectedLine() {
     }
 }
 
-function changeLinesToDefault(){
-    for (let i = 0; i < 2; i++) { gDefault1LineLoc
+function changeLinesToDefault() {
+    for (let i = 0; i < 2; i++) {
+        gDefault1LineLoc
         gMeme.lines[0].y = gDefault1LineLoc.y;
         gMeme.lines[0].x = gDefault1LineLoc.x;
         gMeme.lines[1].y = gDefault2LineLoc.y;
@@ -151,12 +201,6 @@ function changeTxtLoc(dir, diff) {
     line[changeDir] += diff;
 }
 
-function isOutOfCanvas(dir, line) {
-    var txtWidth = gCtx.measureText(line.txt).width;
-    if (dir === 'right' && line.x + txtWidth / 2 > gCanvas.width - 4) return true;
-    if (dir === 'right' && line.x - txtWidth / 2 < 4) return true;
-    return false;
-}
 
 function changeTxt(txt) {
     gMeme.lines[gMeme.selectedLineIdx].txt = txt;
@@ -168,23 +212,4 @@ function changeImg(id) {
 function changeTxtSize(diff) {
     var line = getSelectedLine();
     line.size = line.size + diff;
-}
-
-function getMemeTextByIdx(idx) {
-    return gMeme.lines[idx].txt;
-}
-function getSelectedLine() {
-    return gMeme.lines[gMeme.selectedLineIdx];
-}
-function getSelectedImgUrl() {
-    var img = gImgs.find(img => img.id === gMeme.selectedImgId)
-    return img.url;
-}
-
-function getImgUrlById(id) {
-    return gImgs.find(img => img.id === gMeme[id]);
-}
-
-function getLines() {
-    return gMeme.lines;
 }

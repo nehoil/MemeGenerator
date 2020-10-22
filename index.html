@@ -17,6 +17,7 @@
                 <img src="img/logo.png" alt="">
                 <ul class="nav-list clean-list">
                     <li class="gallery-btn" onclick="onGalleryClick()">Gallery</li>
+                    <li class="gallery-btn" onclick="onMemesClick()">Memes</li>
                     <li>About</li>
                 </ul>
         </nav>
@@ -29,15 +30,16 @@
                     <input type="text" placeholder="Enter search keyword">
                 </div>
                 <div class="keywords-container">
-                    <p>funny comics dogs books  <a href="#"> more..</a></p>
+                    <p>funny comics dogs books <a href="#"> more..</a></p>
                 </div>
             </div>
-            </div>
-        <div class="editor-container main-container hide">
+        </div>
+        <div class="memes-container hide"></div>
+        <div class="editor-container main-container">
             <div class="canvas-container">
                 <canvas id="my-canvas" height="540" width="540"></canvas>
             </div>
-            <div class="controls-container center">
+            <div class="controls-container">
                 <div class="text-input-container">
                     <input type="text" class="text-input" placeholder="Your Text" onkeydown="onTextChange(this.value)">
                 </div>
@@ -70,27 +72,18 @@
                     <button class="text-down-btn" onclick="onLocChange('down',10)">↓</button>
                 </div>
                 <div class="stickers-container"></div>
-                <div class="share-container"></div>
+                <div class="share-container">
+                    <button class="text-left-btn" onclick="onSave()">Save</button>
+                    <button class="text-left-btn" onclick="onShare()">Share</button>
+                    <button class="text-left-btn">
+                        <a href="#" onclick="onDownload(this)" download="my-img.jpg">Download</a>
+                    </button>
+
+                </div>
             </div>
         </div>
         <div class="gallery-container center main-container">
-            <img src="img/1.jpg" alt="" onclick="onImgClick(this,1)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-            <img src="img/2.jpg" alt="" onclick="onImgClick(this,2)">
-        </div>
+ </div>
     </div>
     <footer>
         <div class="footer-container container"><img src="img/logo.png" alt="">
