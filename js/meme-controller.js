@@ -241,8 +241,11 @@ function drawLine(x, y, xEnd = 250, yEnd = 250) {
 /* On Funcs Drag & Drop */
 
 
-function onMouseUp() {
-    gIsOn = false;
+/* Mouse Clicks */
+
+function onMouseDown(ev) {
+    const { offsetX, offsetY } = ev;
+    if (isOnText(offsetX, offsetY)) gIsOn = true;
 }
 
 function onMouseMove(ev) {
@@ -251,8 +254,29 @@ function onMouseMove(ev) {
     moveItem(offsetX, offsetY);
 }
 
-function onMouseDown(ev) {
-    const { offsetX, offsetY } = ev;
+function onMouseUp() {
+    gIsOn = false;
+}
+
+/* Touch Events */
+
+
+function onTouchStart(ev) {
+    ev.preventDefault();
+    var offsetX = ev.touches[0].pageX - ev.touches[0].target.offsetLeft;
+    var offsetY = ev.touches[0].pageY - ev.touches[0].target.offsetTop;
     if (isOnText(offsetX, offsetY)) gIsOn = true;
 }
 
+function onTouchMove(ev) {
+    ev.preventDefault();
+    if (!gIsOn) return;
+    var offsetX = ev.touches[0].pageX - ev.touches[0].target.offsetLeft;
+    var offsetY = ev.touches[0].pageY - ev.touches[0].target.offsetTop;
+    moveItem(offsetX, offsetY);
+}
+
+function onTouchEnd(ev) {
+    ev.preventDefault();
+    gIsOn = false;
+}
