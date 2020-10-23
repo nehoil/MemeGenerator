@@ -1,11 +1,13 @@
-'use strict';
-
-
 // Todos:
 // 1. Fix on change align, rec is demaged.
 // 2. Fix removal func so will not remove lines if they're not selected.
 // 3. Change drawLine to recieve lines.
 // 4. Chnage line 77 on meme-service to work with construction or find a work-around. (preffered)
+// 6. Consider change the canvas resize when live resizing is accure.
+// 7. Improve text onclick detection line 117 (find text hight with better technics) and improve detect if text is bigger
+
+
+'use strict';
 
 var gCanvas;
 var gCtx;
@@ -15,18 +17,20 @@ var gDefault1LineLoc;
 var gDefault2LineLoc;
 var gDefaultLoc;
 var gDefaultTxt = 'ENTER TEXT HERE';
+var gIsOn = false;
+
 
 function init() {
-    if (!gUserMemes.length) gUserMemes = loadFromStorage(STORAGE_MEMES_KEY)
+    if (gUserMemes.length < 0) gUserMemes = loadFromStorage(STORAGE_MEMES_KEY);
     gCanvas = document.querySelector('#my-canvas');
     gCtx = gCanvas.getContext('2d');
-    gDefault1LineLoc = { x: gCanvas.width / 2, y: defaultFontSize };
-    gDefault2LineLoc = { x: gCanvas.width / 2, y: gCanvas.height - 10 };
-    changeLinesToDefault();
-    gDefaultLoc = { x: gCanvas.width / 2, y: gCanvas.height / 2 };
+    resizeCanvas();
     renderCanvas();
     renderGallery();
+    gDefaultLoc = { x: gCanvas.width / 2, y: gCanvas.height / 2 };
+    createDefaultLines();
 }
+
 
 
 /** Render Funcs **/
@@ -56,15 +60,27 @@ function renderMemes() {
     if (!memes) strHtmls = 'No Memes Saved Yet..!'
     else {
         var strHtmls = memes.map(meme => {
-            return `<a href="#" onclick="onDownloadMeme(this,${meme.id})" download="my-img.jpg"><img src="${meme.img}" alt=""></a>`}).join('');
-        }
+            return `<a href="#" onclick="onDownloadMeme(this,${meme.id})" download="my-img.jpg"><img src="${meme.img}" alt=""></a>`
+        }).join('');
+    }
     document.querySelector('.memes-container').innerHTML = strHtmls
 }
+
+
+function resizeCanvas() {
+    gDefaultLoc = { x: gCanvas.width / 2, y: gCanvas.height / 2 };
+    var elContainer = document.querySelector('.canvas-container');
+    gCanvas.width = elContainer.offsetWidth;
+    gCanvas.height = elContainer.offsetHeight;
+    createDefaultLines();
+    renderCanvas();
+}
+
 
 /** On Funcs **/
 
 
-function onDownloadMeme(elLink,id) {
+function onDownloadMeme(elLink, id) {
     var memeImg = gUserMemes.find(meme => meme.id === id).img
     elLink.href = memeImg;
 }
@@ -96,6 +112,7 @@ function onImgClick(el, id) {
     document.querySelector('.editor-container').classList.toggle('hide');
     document.querySelector('.gallery-container').classList.toggle('hide');
     onImgChange(el, id)
+    resizeCanvas();
 }
 
 function onAlignChange(align) {
@@ -166,7 +183,6 @@ function drawTxt() {
 function drawRectAroundTxt(x, y) {
     var selectedLine = getSelectedLine();
     var txtMeasure = gCtx.measureText(selectedLine.txt);
-    console.log('txtMeasure', txtMeasure);
     var height = selectedLine.size * 1.286;
     var yPos = y - height / 1.1 + 10;
     gCtx.strokeRect(x - (txtMeasure.width / 2) - 10, yPos, txtMeasure.width + 20, height - 6);
@@ -217,6 +233,27 @@ function drawLine(x, y, xEnd = 250, yEnd = 250) {
 
 }
 
-/* test codes */
 
+
+/* Drag & Drop */
+
+
+
+/* On Funcs */
+
+
+function onMouseUp() {
+    gIsOn = false;
+}
+
+function onMouseMove(ev) {
+    if (!gIsOn) return;
+    const { offsetX, offsetY } = ev;
+    moveItem(offsetX, offsetY);
+}
+
+function onMouseDown(ev) {
+    const { offsetX, offsetY } = ev;
+    if (isOnText(offsetX, offsetY)) gIsOn = true;
+}
 

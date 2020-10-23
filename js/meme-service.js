@@ -8,68 +8,41 @@ var gMemeNextId = 1;
 var gUserMemes = [];
 var gImgs = [
     {
-        id: 1, url: 'img/1.jpg', keywords: ['happy']
+        id: 1, url: 'img/1.jpg', keywords: ['']
     },
     {
-        id: 2, url: 'img/2.jpg', keywords: ['happy']
+        id: 2, url: 'img/2.jpg', keywords: ['']
     },
     {
-        id: 3, url: 'img/3.jpg', keywords: ['happy']
+        id: 3, url: 'img/3.jpg', keywords: ['']
     },
     {
-        id: 4, url: 'img/4.jpg', keywords: ['happy']
+        id: 4, url: 'img/4.jpg', keywords: ['']
     },
     {
-        id: 5, url: 'img/5.jpg', keywords: ['happy']
+        id: 5, url: 'img/5.jpg', keywords: ['']
     },
     {
-        id: 6, url: 'img/6.jpg', keywords: ['happy']
+        id: 6, url: 'img/6.jpg', keywords: ['']
     },
     {
-        id: 7, url: 'img/7.jpg', keywords: ['happy']
+        id: 7, url: 'img/7.jpg', keywords: ['']
     },
     {
-        id: 8, url: 'img/8.jpg', keywords: ['happy']
+        id: 8, url: 'img/8.jpg', keywords: ['']
     },
     {
-        id: 9, url: 'img/9.jpg', keywords: ['happy']
+        id: 9, url: 'img/9.jpg', keywords: ['']
     },
     {
-        id: 10, url: 'img/10.jpg', keywords: ['happy']
+        id: 10, url: 'img/10.jpg', keywords: ['']
     }
 ];
 var gMeme = {
     selectedImgId: 1,
     selectedLineIdx: 0,
-
-    lines: [
-        {
-            id: 1,
-            isFocus: false,
-            txt: 'First Line Text',
-            size: 48,
-            align: 'center',
-            lineW: 2,
-            font: 'Impact',
-            strokeColor: 'black',
-            fillColor: 'white',
-            x: 225,
-            y: 48
-        },
-        {
-            id: 2,
-            isFocus: false,
-            txt: 'Second Line Text',
-            size: 48,
-            align: 'center',
-            lineW: 2,
-            font: 'Impact',
-            strokeColor: 'black',
-            fillColor: 'white',
-            x: 225,
-            y: 435
-        }
-    ]
+    selectedItemIdx: 0,
+    lines: []
 };
 
 
@@ -98,13 +71,33 @@ function getLines() {
     return gMeme.lines;
 }
 
-/* General Funcs */
+
+/* Local Util Funcs */
 
 function isOutOfCanvas(dir, line) {
     var txtWidth = gCtx.measureText(line.txt).width;
     if (dir === 'right' && line.x + txtWidth / 2 > gCanvas.width - 4) return true;
     if (dir === 'right' && line.x - txtWidth / 2 < 4) return true;
     return false;
+}
+
+
+function isOnText(x,y) {
+    var locs = gMeme.lines.map(line => {
+        var txtMeasure = gCtx.measureText(line.txt);
+        var txtWidth = txtMeasure.width;
+        var txtHeight = gCtx.measureText(line.txt.charAt(0)).width;
+        return {x:line.x, y:line.y, txtWidth, txtHeight}
+    });
+    console.log(locs);
+    var res;
+    locs.forEach(line => {
+        if (x >= line.x-line.txtWidth/2 && x <= line.x+line.txtWidth/2 && y >= line.y){
+            res = true;
+        } 
+        else {res = false}
+    })
+    console.log(res);
 }
 
 /* User Memes Funcs */
@@ -117,26 +110,46 @@ function saveMeme(img) {
 
 /* Change Model Funcs */
 
-function switchSelectedLine() {
-    if (gMeme.selectedLineIdx >= gMeme.lines.length - 1) gMeme.selectedLineIdx = 0;
-    else {
-        gMeme.selectedLineIdx++
-    }
+function createDefaultLines(){
+    var size = (gCanvas.width < 500) ? 38 : 48;
+    var lines = [
+        {
+            id: 1,
+            isFocus: false,
+            txt: 'First Line Text',
+            size,
+            align: 'center',
+            lineW: 2,
+            font: 'Impact',
+            strokeColor: 'black',
+            fillColor: 'white',
+            x: gCanvas.width/2,
+            y: size
+        },
+        {
+            id: 2,
+            isFocus: false,
+            txt: 'Second Line Text',
+            size,
+            align: 'center',
+            lineW: 2,
+            font: 'Impact',
+            strokeColor: 'black',
+            fillColor: 'white',
+            x: gCanvas.width/2,
+            y: gCanvas.height-10
+        }
+    ]
+    gMeme.lines = lines;
 }
 
-function changeLinesToDefault() {
-    for (let i = 0; i < 2; i++) {
-        gDefault1LineLoc
-        gMeme.lines[0].y = gDefault1LineLoc.y;
-        gMeme.lines[0].x = gDefault1LineLoc.x;
-        gMeme.lines[1].y = gDefault2LineLoc.y;
-        gMeme.lines[1].x = gDefault2LineLoc.x;
-    }
+
+function switchSelectedLine() {
+ (gMeme.selectedLineIdx >= gMeme.lines.length - 1) ? gMeme.selectedLineIdx = 0: gMeme.selectedLineIdx++;
 }
 
 function alignChange(lgn) {
     var line = gMeme.lines[gMeme.selectedLineIdx]
-    // line.align = lgn;
     var txtWidth = gCtx.measureText(line.txt).width;
     console.log(txtWidth);
     if (lgn === 'left') line.x = 0 + txtWidth / 2;
@@ -150,12 +163,13 @@ function changeFont(newFont) {
 }
 
 function addLine(txt, loc) {
+    var size = (gCanvas.width < 500) ? 38 : 48;
     var { x, y } = loc
     var newLine = {
         id: gNextId++,
         isFocus: false,
         txt,
-        size: 48,
+        size,
         align: 'center',
         lineW: 2,
         font: 'Impact',
