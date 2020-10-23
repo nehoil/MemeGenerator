@@ -32,6 +32,8 @@ function init() {
     gDefaultLoc = { x: gCanvas.width / 2, y: gCanvas.height / 2 };
     createDefaultLines();
     addSrcListener();
+    renderStickers();
+    DragDropSticker();
 }
 
 
@@ -45,13 +47,14 @@ function renderCanvas() {
     img.onload = () => {
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
         drawTxt();
+        drawStickers();
     }
 }
 
 function renderGallery() {
     var strHtmls = getImgs().map(img => {
         return `
-        <img src="img/${img.id}.jpg" alt="" onclick="onImgClick(this,${img.id})">`
+        <img src="img/${img.id}.jpg" alt="" onclick="onImgClick(this,${img.id})">`;
     }).join('');
     document.querySelector('.gallery-container').innerHTML = strHtmls;
 }
@@ -60,21 +63,29 @@ function renderGallery() {
 function renderMemes() {
     var memes = loadFromStorage(STORAGE_MEMES_KEY)
     var strHtmls;
-    if (!memes) strHtmls = 'No Memes Saved Yet..!'
+    if (!memes) strHtmls = 'No Memes Saved Yet..!';
     else {
         var strHtmls = memes.map(meme => {
             return `<a href="#" onclick="onDownloadMeme(this,${meme.id})" download="my-img.jpg"><img src="${meme.img}" alt=""></a>`
         }).join('');
     }
-    document.querySelector('.memes-container').innerHTML = strHtmls
+    document.querySelector('.memes-container').innerHTML = strHtmls;
+}
+
+function renderStickers() {
+    var stickers = getStickersToPanel();
+    var strHtmls = stickers.map(sticker => {
+        return ` <img src="img/stickers/${sticker.id}.png" alt="">`;
+    }).join('');
+    document.querySelector('.stickers-container').innerHTML = strHtmls
 }
 
 
 function resizeCanvas() {
-    gDefaultLoc = { x: gCanvas.width / 2, y: gCanvas.height / 2 };
     var elContainer = document.querySelector('.canvas-container');
     gCanvas.width = elContainer.offsetWidth;
     gCanvas.height = elContainer.offsetHeight;
+    gDefaultLoc = { x: gCanvas.width / 2, y: gCanvas.height / 2 };
     createDefaultLines();
     renderCanvas();
 }
@@ -96,11 +107,16 @@ function onDownloadMeme(elLink, id) {
 }
 
 function onDownload(elLink) {
+    removeFocus();
+    renderCanvas();
+    renderCanvas();
     var imgContent = gCanvas.toDataURL('image/jpeg');
     elLink.href = imgContent;
 }
 
 function onSave() {
+    removeFocus();
+    renderCanvas();
     var imgContent = gCanvas.toDataURL('image/jpeg');
     saveMeme(imgContent)
 }
@@ -158,9 +174,9 @@ function onRemove() {
 }
 
 function onSwitch() {
-    var prevLine = getSelectedLine().isFocus = false;
+    getSelectedLine().isFocus = false;
     switchSelectedLine();
-    var line = getSelectedLine().isFocus = true;
+    getSelectedLine().isFocus = true;
     renderCanvas()
 }
 
@@ -191,7 +207,19 @@ function drawTxt() {
     var lines = getLines();
     lines.forEach(line => {
         drawText(line.txt, line.x, line.y, line.font, line.size, line.lineW, line.strokeColor, line.fillColor, line.align);
-        if (line.isFocus) drawRectAroundTxt(line.x, line.y)
+        if (line.isFocus) {
+            drawRectAroundTxt(line.x, line.y)
+            console.log('works!');
+        }
+    });
+}
+
+
+function drawStickers() {
+    var stickers = getStickers();
+    stickers.forEach(sticker => {
+        drawImg(sticker.element, sticker.x, sticker.y);
+        if (sticker.isFocus) drawRectAroundTxt(line.x, line.y)
     });
 }
 
@@ -224,8 +252,15 @@ function drawGlowingText(text, x, y, glowColorHexString, glowDistance = 10) {
     gCtx.restore();
 }
 
-function drawImgFromEl(el) {
-    gCtx.drawImage(el, 0, 0, gCanvas.width, gCanvas.height)
+function drawImg(img, x, y) {
+    var stickerSize = (gCanvas.width / 5)
+    gCtx.drawImage(img, x - 25, y - 25, stickerSize, stickerSize)
+}
+
+function drawImgFromUrl(imgUrl, x, y) {
+    var img = new Image;
+    img.src = imgUrl;
+    gCtx.drawImage(img, x - 25, y - 25, 50, 50)
 }
 
 
@@ -258,7 +293,7 @@ function drawLine(x, y, xEnd = 250, yEnd = 250) {
 function onMouseDown(ev) {
     gIsMouseDown = true;
     const { offsetX, offsetY } = ev;
-    if (isOnText(offsetX, offsetY)) {
+    if (isOnItem(offsetX, offsetY)) {
         gIsOn = true;
         changeCursor(1);
     }
@@ -271,7 +306,7 @@ function changeCursor(isShow) {
 
 function onMouseMove(ev) {
     const { offsetX, offsetY } = ev;
-    if (isOnText(offsetX, offsetY)) {
+    if (isOnItem(offsetX, offsetY)) {
         changeCursor(1);
     } else if (!gIsMouseDown) {
         changeCursor(0);
@@ -280,7 +315,7 @@ function onMouseMove(ev) {
     moveItem(offsetX, offsetY);
 }
 
-function onMouseUp() {
+function onMouseUp(ev) {
     changeCursor(0);
     gIsMouseDown = false;
     gIsOn = false;
@@ -293,7 +328,7 @@ function onTouchStart(ev) {
     ev.preventDefault();
     var offsetX = ev.touches[0].pageX - ev.touches[0].target.offsetLeft;
     var offsetY = ev.touches[0].pageY - ev.touches[0].target.offsetTop;
-    if (isOnText(offsetX, offsetY)) gIsOn = true;
+    if (isOnItem(offsetX, offsetY)) gIsOn = true;
 }
 
 function onTouchMove(ev) {
@@ -335,4 +370,33 @@ function addSrcListener() {
             else onGalleryClick();
         }, 100);
     })
+}
+
+/* Drop & Drop Stickers Funcs */
+
+
+function DragDropSticker() {
+    var draggedItem;
+    document.querySelector('.stickers-container').addEventListener('dragstart', function (e) {
+        toggleDragModal()
+        draggedItem = e.target;
+        setTimeout(() => {
+            toggleDragModal()
+        }, 1000);
+    });
+
+    gCanvas.addEventListener('dragover', function (e) {
+        e.preventDefault();
+    });
+    gCanvas.addEventListener('drop', function (e) {
+        e.preventDefault();
+        var { offsetX, offsetY } = e;
+        drawImg(draggedItem, offsetX, offsetY);
+        addSticker(offsetX, offsetY, draggedItem);
+    });
+
+}
+
+function toggleDragModal() {
+    document.querySelector('.drag-modal').classList.toggle('hide');
 }

@@ -29,7 +29,7 @@
                 <div class="search-container">
                     <input  class="search-input" type="text" placeholder="Enter search keyword">
                 </div>
-                <div class="keywords-container">
+                <div class="keywords-container hide">
                     <p>funny comics dogs books <a href="#"> more..</a></p>
                 </div>
             </div>
@@ -38,6 +38,10 @@
         <div class="search-page-container hide"></div>
         <div class="editor-container main-container">
             <div class="canvas-container">
+                <div class="drag-modal hide">
+                    <h3>Drag Me Here!</h3>
+                    <img src="img/arrow.gif" alt="" srcset="">
+                    </div>
                 <canvas id="my-canvas" height="540" width="540" onmousedown="onMouseDown(event)" onmouseup="onMouseUp(event)" onmousemove="onMouseMove(event)" ontouchstart="onTouchStart(event)" ontouchmove="onTouchMove(event)"
                 ontouchend="onTouchEnd(event)"></canvas>
             </div>

@@ -17,6 +17,7 @@ var gKeywords = {
 };
 var gNextId = 2;
 var gMemeNextId = 1;
+var gStickerNextId = 1;
 var gUserMemes = [];
 var gImgs = [
     {
@@ -50,18 +51,56 @@ var gImgs = [
         id: 10, url: 'img/10.jpg', keywords: ['obama']
     }
 ];
+
+var gStickers = [
+    {
+        id: 1, url: 'img/stickers/1.jpg'
+    },
+    {
+        id: 2, url: 'img/stickers/2.jpg'
+    },
+    {
+        id: 3, url: 'img/stickers/3.jpg'
+    },
+    {
+        id: 4, url: 'img/stickers/4.jpg'
+    },
+    {
+        id: 5, url: 'img/stickers/5.jpg'
+    },
+    {
+        id: 6, url: 'img/stickers/6.jpg'
+    },
+    {
+        id: 7, url: 'img/stickers/6.jpg'
+    },
+    {
+        id: 8, url: 'img/stickers/6.jpg'
+    }
+
+];
 var gMeme = {
     selectedImgId: 1,
     selectedLineIdx: 0,
+    selectedItemGid: '',
     selectedItemIdx: null,
-    lines: []
+    lines: [],
+    stickers: []
 };
 
 
 /* Get Funcs */
 
 function getMemsImgs(){
-    return gImgs
+    return gImgs;
+}
+
+function getStickersToPanel(){
+    return gStickers;
+}
+
+function getStickers(){
+    return gMeme.stickers;
 }
 
 function getImgs() {
@@ -106,17 +145,23 @@ function drawRectAroundTxt(x, y) {
     gCtx.strokeRect(x - (txtMeasure.width / 2) - 10, yPos, txtMeasure.width + 20, height - 6);
 }
 
-function isOnText(x, y) {
+function isOnItem(x, y) {
     var locs = gMeme.lines.map((line, idx) => {
         var txtMeasure = gCtx.measureText(line.txt);
         var txtWidth = txtMeasure.width;
         var height = line.size * 1.286;
-        return { x: line.x, y: line.y, txtWidth, height, id: line.id, idx }
+        return { x: line.x, y: line.y, txtWidth, height, id: line.id, idx, gid: line.gid }
+    });
+    gMeme.stickers.forEach((sticker, idx) => {
+        locs.push({ x: sticker.x, y: sticker.y, txtWidth:50, height:50, id: sticker.id, idx, gid: sticker.gid })
     });
     var res;
-    locs.forEach(line => {
-        if (x >= line.x - line.txtWidth / 2 && x <= line.x + line.txtWidth / 2 && y <= line.y && y > line.y - line.height) {
-            if (!gIsMouseDown) gMeme.selectedItemIdx = line.idx;
+    locs.forEach(item => {
+        if (x >= item.x - item.txtWidth / 2 && x <= item.x + item.txtWidth / 2 && y <= item.y && y > item.y - item.height-20) {
+            if (!gIsMouseDown){
+                gMeme.selectedItemIdx = item.idx
+                gMeme.selectedItemGid = item.gid
+            } 
             return res = true;
         }
     });
@@ -133,10 +178,23 @@ function saveMeme(img) {
 
 /* Change Model Funcs */
 
+function removeFocus(){
+    gMeme.lines.forEach(line => line.isFocus = false)
+    console.log(gMeme.lines);
+}
+
+
 function moveItem(x, y) {
-    // gMeme.lines[gMeme.selectedItemIdx] = {x,y};
-    gMeme.lines[gMeme.selectedItemIdx].x = x
-    gMeme.lines[gMeme.selectedItemIdx].y = y
+    var found = gMeme.lines.find(line => line.gid === gMeme.selectedItemGid);
+    if (found) {
+        found.x = x
+        found.y = y
+        changeSelectedIdx();
+    } else {
+        found = gMeme.stickers.find(sticker => sticker.gid === gMeme.selectedItemGid);
+        found.x = x
+        found.y = y
+    }
     renderCanvas()
 }
 
@@ -153,6 +211,7 @@ function createDefaultLines() {
             font: 'Impact',
             strokeColor: 'black',
             fillColor: 'white',
+            gid: makeId(),
             x: gCanvas.width / 2,
             y: size
         },
@@ -166,6 +225,7 @@ function createDefaultLines() {
             font: 'Impact',
             strokeColor: 'black',
             fillColor: 'white',
+            gid: makeId(),
             x: gCanvas.width / 2,
             y: gCanvas.height - 10
         }
@@ -176,6 +236,12 @@ function createDefaultLines() {
 
 function switchSelectedLine() {
     (gMeme.selectedLineIdx >= gMeme.lines.length - 1) ? gMeme.selectedLineIdx = 0 : gMeme.selectedLineIdx++;
+}
+
+function changeSelectedIdx(){
+    gMeme.lines[gMeme.selectedLineIdx].isFocus = false;
+    gMeme.selectedLineIdx = gMeme.selectedItemIdx;
+    gMeme.lines[gMeme.selectedLineIdx].isFocus = true;
 }
 
 function alignChange(lgn) {
@@ -192,6 +258,21 @@ function changeFont(newFont) {
     line.font = newFont;
 }
 
+
+function addSticker(x,y, element) {
+    var newLine = {
+        id: gStickerNextId++,
+        isFocus: false,
+        size: 50,
+        align: 'center',
+        gid: makeId(),
+        element,
+        x,
+        y
+    }
+    gMeme.stickers.push(newLine)
+}
+
 function addLine(txt, loc) {
     var size = (gCanvas.width < 500) ? 38 : 48;
     var { x, y } = loc
@@ -205,6 +286,7 @@ function addLine(txt, loc) {
         font: 'Impact',
         strokeColor: 'black',
         fillColor: 'white',
+        gid: makeId(),
         x,
         y
     }
