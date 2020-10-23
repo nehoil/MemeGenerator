@@ -234,12 +234,11 @@ function drawLine(x, y, xEnd = 250, yEnd = 250) {
 }
 
 
-
 /* Drag & Drop */
 
 
 
-/* On Funcs */
+/* On Funcs Drag & Drop */
 
 
 function onMouseUp() {

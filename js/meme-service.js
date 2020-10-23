@@ -41,7 +41,7 @@ var gImgs = [
 var gMeme = {
     selectedImgId: 1,
     selectedLineIdx: 0,
-    selectedItemIdx: 0,
+    selectedItemIdx: null,
     lines: []
 };
 
@@ -82,22 +82,29 @@ function isOutOfCanvas(dir, line) {
 }
 
 
-function isOnText(x,y) {
-    var locs = gMeme.lines.map(line => {
+function drawRectAroundTxt(x, y) {
+    var selectedLine = getSelectedLine();
+    var txtMeasure = gCtx.measureText(selectedLine.txt);
+    var height = selectedLine.size * 1.286;
+    var yPos = y - height / 1.1 + 10;
+    gCtx.strokeRect(x - (txtMeasure.width / 2) - 10, yPos, txtMeasure.width + 20, height - 6);
+}
+
+function isOnText(x, y) {
+    var locs = gMeme.lines.map((line,idx) => {
         var txtMeasure = gCtx.measureText(line.txt);
         var txtWidth = txtMeasure.width;
-        var txtHeight = gCtx.measureText(line.txt.charAt(0)).width;
-        return {x:line.x, y:line.y, txtWidth, txtHeight}
+        var height = line.size * 1.286;
+        return {x:line.x, y:line.y, txtWidth, height, id:line.id, idx}
     });
-    console.log(locs);
     var res;
     locs.forEach(line => {
-        if (x >= line.x-line.txtWidth/2 && x <= line.x+line.txtWidth/2 && y >= line.y){
-            res = true;
-        } 
-        else {res = false}
-    })
-    console.log(res);
+        if (x >= line.x-line.txtWidth/2 && x <= line.x+line.txtWidth/2 && y <= line.y && y > line.y - line.height){
+            gMeme.selectedItemIdx = line.idx;
+            return res = true;
+        }
+    });
+    return res;
 }
 
 /* User Memes Funcs */
@@ -109,6 +116,13 @@ function saveMeme(img) {
 }
 
 /* Change Model Funcs */
+
+function moveItem(x, y){
+    // gMeme.lines[gMeme.selectedItemIdx] = {x,y};
+    gMeme.lines[gMeme.selectedItemIdx].x = x
+    gMeme.lines[gMeme.selectedItemIdx].y = y
+    renderCanvas()
+}
 
 function createDefaultLines(){
     var size = (gCanvas.width < 500) ? 38 : 48;
