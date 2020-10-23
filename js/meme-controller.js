@@ -18,6 +18,8 @@ var gDefault2LineLoc;
 var gDefaultLoc;
 var gDefaultTxt = 'ENTER TEXT HERE';
 var gIsOn = false;
+var gIsMouseDown = false;
+var gIsImgClicked = false;
 
 
 function init() {
@@ -29,6 +31,7 @@ function init() {
     renderGallery();
     gDefaultLoc = { x: gCanvas.width / 2, y: gCanvas.height / 2 };
     createDefaultLines();
+    addSrcListener();
 }
 
 
@@ -79,6 +82,13 @@ function resizeCanvas() {
 
 /** On Funcs **/
 
+function onSearch(keyword) {
+    document.querySelector('.search-page-container').classList.remove('hide');
+    document.querySelector('.memes-container').classList.add('hide');
+    document.querySelector('.gallery-container').classList.add('hide');
+    document.querySelector('.editor-container').classList.add('hide');
+    renderSearchResult(keyword)
+}
 
 function onDownloadMeme(elLink, id) {
     var memeImg = gUserMemes.find(meme => meme.id === id).img
@@ -98,6 +108,7 @@ function onSave() {
 function onGalleryClick() {
     document.querySelector('.gallery-container').classList.remove('hide');
     document.querySelector('.memes-container').classList.add('hide');
+    document.querySelector('.search-page-container').classList.add('hide');
     document.querySelector('.editor-container').classList.add('hide');
 }
 
@@ -109,9 +120,14 @@ function onMemesClick() {
 }
 
 function onImgClick(el, id) {
+    gIsImgClicked = true;
     document.querySelector('.editor-container').classList.toggle('hide');
+    document.querySelector('.search-page-container').classList.add('hide');
     document.querySelector('.gallery-container').classList.toggle('hide');
-    onImgChange(el, id)
+    onImgChange(el, id);
+    setTimeout(() => {
+        gIsImgClicked = false;
+    }, 100);
     resizeCanvas();
 }
 
@@ -237,24 +253,36 @@ function drawLine(x, y, xEnd = 250, yEnd = 250) {
 /* Drag & Drop */
 
 
-
-/* On Funcs Drag & Drop */
-
-
 /* Mouse Clicks */
 
 function onMouseDown(ev) {
+    gIsMouseDown = true;
     const { offsetX, offsetY } = ev;
-    if (isOnText(offsetX, offsetY)) gIsOn = true;
+    if (isOnText(offsetX, offsetY)) {
+        gIsOn = true;
+        changeCursor(1);
+    }
+}
+
+function changeCursor(isShow) {
+    if (!gCanvas) return;
+    (isShow) ? gCanvas.classList.add('pointer') : gCanvas.classList.remove('pointer');
 }
 
 function onMouseMove(ev) {
-    if (!gIsOn) return;
     const { offsetX, offsetY } = ev;
+    if (isOnText(offsetX, offsetY)) {
+        changeCursor(1);
+    } else if (!gIsMouseDown) {
+        changeCursor(0);
+    }
+    if (!gIsOn) return;
     moveItem(offsetX, offsetY);
 }
 
 function onMouseUp() {
+    changeCursor(0);
+    gIsMouseDown = false;
     gIsOn = false;
 }
 
@@ -279,4 +307,32 @@ function onTouchMove(ev) {
 function onTouchEnd(ev) {
     ev.preventDefault();
     gIsOn = false;
+}
+
+
+/* Search Funcs */
+
+function renderSearchResult(keyword) {
+    var imgs = getMemsImgs()
+    var strHtmls;
+    var strHtmls = imgs.map(img => {
+        var found = img.keywords.find(Imgkeyword => Imgkeyword === keyword);
+        if (found) return ` <img src="img/${img.id}.jpg" alt="" onclick="onImgClick(this,${img.id})">`
+    }).join('');
+    if (!strHtmls) strHtmls = 'No images found..';
+    document.querySelector('.search-page-container').innerHTML = strHtmls
+}
+
+function addSrcListener() {
+    var input = document.querySelector('.search-input');
+    input.addEventListener('input', function () {
+        var val = input.value.toLowerCase();
+        onSearch(val);
+    })
+    input.addEventListener('blur', function () {
+        setTimeout(() => {
+            if (gIsImgClicked) document.querySelector('.search-page-container').classList.add
+            else onGalleryClick();
+        }, 100);
+    })
 }

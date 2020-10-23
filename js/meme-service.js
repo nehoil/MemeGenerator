@@ -2,40 +2,52 @@
 
 const STORAGE_MEMES_KEY = 'memesDB';
 
-var gKeywords = { 'happy': 12, 'funny puk': 1 };
+var gKeywords = {
+    'happy': 0,
+    'dogs': 0,
+    'trump': 0,
+    'fun': 0,
+    'baby': 0,
+    'dog': 0,
+    'cat': 0,
+    'animals': 0,
+    'obama': 0,
+    'history': 0,
+    'kid': 0
+};
 var gNextId = 2;
 var gMemeNextId = 1;
 var gUserMemes = [];
 var gImgs = [
     {
-        id: 1, url: 'img/1.jpg', keywords: ['']
+        id: 1, url: 'img/1.jpg', keywords: ['trump']
     },
     {
-        id: 2, url: 'img/2.jpg', keywords: ['']
+        id: 2, url: 'img/2.jpg', keywords: ['dogs', 'fun']
     },
     {
-        id: 3, url: 'img/3.jpg', keywords: ['']
+        id: 3, url: 'img/3.jpg', keywords: ['baby', 'dog', 'animals']
     },
     {
-        id: 4, url: 'img/4.jpg', keywords: ['']
+        id: 4, url: 'img/4.jpg', keywords: ['cat', 'animals']
     },
     {
-        id: 5, url: 'img/5.jpg', keywords: ['']
+        id: 5, url: 'img/5.jpg', keywords: ['baby', 'funny']
     },
     {
-        id: 6, url: 'img/6.jpg', keywords: ['']
+        id: 6, url: 'img/6.jpg', keywords: ['history']
     },
     {
-        id: 7, url: 'img/7.jpg', keywords: ['']
+        id: 7, url: 'img/7.jpg', keywords: ['baby', 'funny']
     },
     {
-        id: 8, url: 'img/8.jpg', keywords: ['']
+        id: 8, url: 'img/8.jpg', keywords: ['funny']
     },
     {
-        id: 9, url: 'img/9.jpg', keywords: ['']
+        id: 9, url: 'img/9.jpg', keywords: ['kid', 'funny']
     },
     {
-        id: 10, url: 'img/10.jpg', keywords: ['']
+        id: 10, url: 'img/10.jpg', keywords: ['obama']
     }
 ];
 var gMeme = {
@@ -47,6 +59,10 @@ var gMeme = {
 
 
 /* Get Funcs */
+
+function getMemsImgs(){
+    return gImgs
+}
 
 function getImgs() {
     return gImgs;
@@ -91,16 +107,16 @@ function drawRectAroundTxt(x, y) {
 }
 
 function isOnText(x, y) {
-    var locs = gMeme.lines.map((line,idx) => {
+    var locs = gMeme.lines.map((line, idx) => {
         var txtMeasure = gCtx.measureText(line.txt);
         var txtWidth = txtMeasure.width;
         var height = line.size * 1.286;
-        return {x:line.x, y:line.y, txtWidth, height, id:line.id, idx}
+        return { x: line.x, y: line.y, txtWidth, height, id: line.id, idx }
     });
     var res;
     locs.forEach(line => {
-        if (x >= line.x-line.txtWidth/2 && x <= line.x+line.txtWidth/2 && y <= line.y && y > line.y - line.height){
-            gMeme.selectedItemIdx = line.idx;
+        if (x >= line.x - line.txtWidth / 2 && x <= line.x + line.txtWidth / 2 && y <= line.y && y > line.y - line.height) {
+            if (!gIsMouseDown) gMeme.selectedItemIdx = line.idx;
             return res = true;
         }
     });
@@ -117,14 +133,14 @@ function saveMeme(img) {
 
 /* Change Model Funcs */
 
-function moveItem(x, y){
+function moveItem(x, y) {
     // gMeme.lines[gMeme.selectedItemIdx] = {x,y};
     gMeme.lines[gMeme.selectedItemIdx].x = x
     gMeme.lines[gMeme.selectedItemIdx].y = y
     renderCanvas()
 }
 
-function createDefaultLines(){
+function createDefaultLines() {
     var size = (gCanvas.width < 500) ? 38 : 48;
     var lines = [
         {
@@ -137,7 +153,7 @@ function createDefaultLines(){
             font: 'Impact',
             strokeColor: 'black',
             fillColor: 'white',
-            x: gCanvas.width/2,
+            x: gCanvas.width / 2,
             y: size
         },
         {
@@ -150,8 +166,8 @@ function createDefaultLines(){
             font: 'Impact',
             strokeColor: 'black',
             fillColor: 'white',
-            x: gCanvas.width/2,
-            y: gCanvas.height-10
+            x: gCanvas.width / 2,
+            y: gCanvas.height - 10
         }
     ]
     gMeme.lines = lines;
@@ -159,7 +175,7 @@ function createDefaultLines(){
 
 
 function switchSelectedLine() {
- (gMeme.selectedLineIdx >= gMeme.lines.length - 1) ? gMeme.selectedLineIdx = 0: gMeme.selectedLineIdx++;
+    (gMeme.selectedLineIdx >= gMeme.lines.length - 1) ? gMeme.selectedLineIdx = 0 : gMeme.selectedLineIdx++;
 }
 
 function alignChange(lgn) {
