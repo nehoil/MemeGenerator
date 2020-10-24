@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meme Generator</title>
     <link rel="stylesheet" href="styles/hamburger.css">
+    <link rel="stylesheet" href="styles/imgfx.css">
     <link rel="stylesheet" href="styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
@@ -19,7 +20,6 @@
                 <ul class="nav-list clean-list">
                     <li class="gallery-btn" onclick="onGalleryClick()">Gallery</li>
                     <li class="gallery-btn" onclick="onMemesClick()">Memes</li>
-                    <li>About</li>
                 </ul>
                 <button class="hamburger hamburger--spring" onclick="toggleMenu()" type="button">
                     <span class="hamburger-box">
@@ -34,7 +34,7 @@
         <div class="search-header">
             <div class="search-content main-container">
                 <div class="search-container center main-container">
-                    <input  class="search-input" type="text" placeholder="Enter search keyword">
+                    <input class="search-input" type="text" placeholder="Enter search keyword">
                 </div>
                 <div class="no-result-container"></div>
                 <div class="keywords-container hide">
@@ -49,37 +49,49 @@
                 <div class="drag-modal hide">
                     <h3>Drag Me Here!</h3>
                     <img src="img/arrow.gif" alt="" srcset="">
-                    </div>
-                <canvas id="my-canvas" height="540" width="540" onmousedown="onMouseDown(event)" onmouseup="onMouseUp(event)" onmousemove="onMouseMove(event)" ontouchstart="onTouchStart(event)" ontouchmove="onTouchMove(event)"
-                ontouchend="onTouchEnd(event)"></canvas>
+                </div>
+                <canvas id="my-canvas" height="540" width="540" onmousedown="onMouseDown(event)"
+                    onmouseup="onMouseUp(event)" onmousemove="onMouseMove(event)" ontouchstart="onTouchStart(event)"
+                    ontouchmove="onTouchMove(event)" ontouchend="onTouchEnd(event)"></canvas>
             </div>
             <div class="controls-container">
                 <div class="text-input-container">
                     <input type="text" class="text-input" placeholder="Your Text" onkeydown="onTextChange(this.value)">
                 </div>
                 <div class="swith-add-del-contianer">
-                    <button class="switch-btn" onclick="onSwitch()">↑ ↓</button>
-                    <button class="delete-btn" onclick="onRemove()">Delete</button>
-                    <button class="add-btn" onclick="onAddTxt()">Add +</button>
+                    <button class="switch-btn" onclick="onSwitch()"><img src="img/icons/switch.png" alt=""
+                            class="icon"></button>
+                    <button class="delete-btn" onclick="onRemove()"><img src="img/icons/delete.png" alt=""
+                            class="icon"></button>
+                    <button class="add-btn" onclick="onAddTxt()"><img src="img/icons/add.png" alt=""
+                            class="icon"></button>
                 </div>
                 <div class="txt-size-alings-container">
-                    <button class="text-increase-btn" onclick="onTxtSizeChange(10)">Text +</button>
-                    <button class="text-decrease-btn" onclick="onTxtSizeChange(-10)">Text -</button>
-                    <select name="" class="align-select" onchange="onAlignChange(this.value)">
-                        <option value="center">Center</option>
-                        <option value="left">Left</option>
-                        <option value="right">Right</option>
-                    </select>
+                    <button class="text-increase-btn" onclick="onTxtSizeChange(10)"><img src="img/icons/decrease.png"
+                            alt="" class="icon"></button>
+                    <button class="text-decrease-btn" onclick="onTxtSizeChange(-10)"><img src="img/icons/increase.png"
+                            alt="" class="icon"></button>
+                            <button onclick="onAlignChange('left')"><img src="img/icons/left.png" alt="" class="icon"></button>
+                            <button onclick="onAlignChange('center')"><img src="img/icons/center.png" alt=""
+                                    class="icon"></button>
+                    <button onclick="onAlignChange('right')"><img src="img/icons/right.png" alt=""
+                            class="icon"></button>
                 </div>
                 <div class="font-color-w-container">
-                    <input type="color" name="" class="color-input" onchange="onFillColorChange(this.value)">
-                    <select name="" class="font-select" onchange="onFontChange(this.value)">
+                    <select class="font-select" id="font-select" onchange="onFontChange(this.value)" place-holder="Select Font:">
+                        <option value="" selected disabled hidden>Select Font</option>
                         <option value="Impact">Impact</option>
                         <option value="Ariel">Ariel</option>
                         <option value="Open Sans">Open Sans</option>
                     </select>
+                    <span class="color-container">
+                        <button><label for="color-picker"><img src="img/icons/rgb.png" alt="" class="icon"></button>
+                            <input type="color" id="color-picker" class="color-input" onchange="onFillColorChange(this.value)">
+                        </label>
+                    </span>
+                    <button onclick="onMoveBtnClick()"><img src="img/icons/move.png" alt="" class="icon"></button>
                 </div>
-                <div class="move-container">
+                <div class="move-container hide">
                     <button class="text-left-btn" onclick="onLocChange('left',-10)">←</button>
                     <button class="text-right-btn" onclick="onLocChange('right',10)">→</button>
                     <button class="text-up-btn" onclick="onLocChange('up',-10)">↑</button>
@@ -87,17 +99,20 @@
                 </div>
                 <div class="stickers-container"></div>
                 <div class="share-container">
-                    <button class="text-left-btn" onclick="onSave()">Save</button>
-                    <button class="text-left-btn" onclick="onShare()">Share</button>
-                    <button class="text-left-btn">
-                        <a href="#" onclick="onDownload(this)" download="my-img.jpg">Download</a>
+                    <button class="save-btn" onclick="onSave()"><img src="img/icons/save.png" alt=""
+                            class="icon"></button>
+                    <button class="share-btn" onclick="onShare()"><img src="img/icons/share.png" alt=""
+                            class="icon"></button>
+                    <button class="download-btn">
+                        <a href="#" onclick="onDownload(this)" download="my-img.jpg"><img src="img/icons/download.png"
+                                alt="" class="icon"></a>
                     </button>
 
                 </div>
             </div>
         </div>
-        <div class="gallery-container center main-container"> 
- </div>
+        <div class="gallery-container center main-container">
+        </div>
     </div>
     <footer>
         <div class="footer-container container"><img src="img/logo.png" alt="">

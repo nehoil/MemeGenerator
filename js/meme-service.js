@@ -49,6 +49,30 @@ var gImgs = [
     },
     {
         id: 10, url: 'img/10.jpg', keywords: ['obama']
+    },
+    {
+        id: 11, url: 'img/11.jpg', keywords: ['sport']
+    },
+    {
+        id: 12, url: 'img/12.jpg', keywords: ['Israel']
+    },
+    {
+        id: 13, url: 'img/13.jpg', keywords: ['movies']
+    },
+    {
+        id: 14, url: 'img/10.jpg', keywords: ['movies']
+    },
+    {
+        id: 15, url: 'img/15.jpg', keywords: ['game of thrones']
+    },
+    {
+        id: 16, url: 'img/16.jpg', keywords: ['movies']
+    },
+    {
+        id: 17, url: 'img/17.jpg', keywords: ['putin']
+    },
+    {
+        id: 18, url: 'img/18.jpg', keywords: ['movies']
     }
 ];
 

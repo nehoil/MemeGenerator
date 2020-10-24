@@ -45,7 +45,7 @@ function renderCanvas() {
 function renderGallery() {
     var strHtmls = getImgs().map(img => {
         return `
-        <img src="img/${img.id}.jpg" alt="" onclick="onImgClick(this,${img.id})">`;
+        <img src="img/${img.id}.jpg" alt="" onclick="onImgClick(this,${img.id})" class="btn">`;
     }).join('');
     document.querySelector('.gallery-container').innerHTML = strHtmls;
 }
@@ -83,6 +83,10 @@ function resizeCanvas() {
 
 
 /** On Funcs **/
+
+function onMoveBtnClick(){
+    document.querySelector('.move-container').classList.toggle('hide');
+}
 
 function onSearch(keyword) {
     document.querySelector('.search-page-container').classList.remove('hide');
