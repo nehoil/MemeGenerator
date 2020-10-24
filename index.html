@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meme Generator</title>
+    <link rel="stylesheet" href="styles/hamburger.css">
     <link rel="stylesheet" href="styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
@@ -14,21 +15,28 @@
     <header>
         <nav class="main-container">
             <div class="main-nav">
-                <img src="img/logo.png" alt="">
+                <img src="img/logo.png" alt="" onclick="onGalleryClick()" class="logo">
                 <ul class="nav-list clean-list">
                     <li class="gallery-btn" onclick="onGalleryClick()">Gallery</li>
                     <li class="gallery-btn" onclick="onMemesClick()">Memes</li>
                     <li>About</li>
                 </ul>
+                <button class="hamburger hamburger--spring" onclick="toggleMenu()" type="button">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
         </nav>
         </div>
     </header>
     <div class="container">
         <div class="search-header">
             <div class="search-content main-container">
-                <div class="search-container">
+                <div class="search-container center main-container">
                     <input  class="search-input" type="text" placeholder="Enter search keyword">
                 </div>
+                <div class="no-result-container"></div>
                 <div class="keywords-container hide">
                     <p>funny comics dogs books <a href="#"> more..</a></p>
                 </div>
@@ -36,7 +44,7 @@
         </div>
         <div class="memes-container hide"></div>
         <div class="search-page-container hide"></div>
-        <div class="editor-container main-container">
+        <div class="editor-container main-container hide">
             <div class="canvas-container">
                 <div class="drag-modal hide">
                     <h3>Drag Me Here!</h3>
@@ -88,7 +96,7 @@
                 </div>
             </div>
         </div>
-        <div class="gallery-container center main-container">
+        <div class="gallery-container center main-container"> 
  </div>
     </div>
     <footer>

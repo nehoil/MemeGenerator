@@ -146,6 +146,7 @@ function drawRectAroundTxt(x, y) {
 }
 
 function isOnItem(x, y) {
+    // console.log(x);
     var locs = gMeme.lines.map((line, idx) => {
         var txtMeasure = gCtx.measureText(line.txt);
         var txtWidth = txtMeasure.width;

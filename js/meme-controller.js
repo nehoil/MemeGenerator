@@ -1,12 +1,3 @@
-// Todos:
-// 1. Fix on change align, rec is demaged.
-// 2. Fix removal func so will not remove lines if they're not selected.
-// 3. Change drawLine to recieve lines.
-// 4. Chnage line 77 on meme-service to work with construction or find a work-around. (preffered)
-// 6. Consider change the canvas resize when live resizing is accure.
-// 7. Improve text onclick detection line 117 (find text hight with better technics) and improve detect if text is bigger
-
-
 'use strict';
 
 var gCanvas;
@@ -75,7 +66,7 @@ function renderMemes() {
 function renderStickers() {
     var stickers = getStickersToPanel();
     var strHtmls = stickers.map(sticker => {
-        return ` <img src="img/stickers/${sticker.id}.png" alt="">`;
+        return ` <img src="img/stickers/${sticker.id}.png" alt="" ontouchstart="onTouchStartSticker(event,this,${sticker.id})">`;
     }).join('');
     document.querySelector('.stickers-container').innerHTML = strHtmls
 }
@@ -209,7 +200,6 @@ function drawTxt() {
         drawText(line.txt, line.x, line.y, line.font, line.size, line.lineW, line.strokeColor, line.fillColor, line.align);
         if (line.isFocus) {
             drawRectAroundTxt(line.x, line.y)
-            console.log('works!');
         }
     });
 }
@@ -324,24 +314,39 @@ function onMouseUp(ev) {
 /* Touch Events */
 
 
+
 function onTouchStart(ev) {
     ev.preventDefault();
-    var offsetX = ev.touches[0].pageX - ev.touches[0].target.offsetLeft;
-    var offsetY = ev.touches[0].pageY - ev.touches[0].target.offsetTop;
+    var touch = ev.touches[0] || ev.changedTouches[0];
+    var realTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+    var offsetX = touch.clientX - realTarget.getBoundingClientRect().x;
+    var offsetY = touch.clientY - realTarget.getBoundingClientRect().y
     if (isOnItem(offsetX, offsetY)) gIsOn = true;
 }
+
 
 function onTouchMove(ev) {
     ev.preventDefault();
     if (!gIsOn) return;
-    var offsetX = ev.touches[0].pageX - ev.touches[0].target.offsetLeft;
-    var offsetY = ev.touches[0].pageY - ev.touches[0].target.offsetTop;
+    var touch = ev.touches[0] || ev.changedTouches[0];
+    var realTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+    var offsetX = touch.clientX - realTarget.getBoundingClientRect().x;
+    var offsetY = touch.clientY - realTarget.getBoundingClientRect().y
     moveItem(offsetX, offsetY);
 }
 
 function onTouchEnd(ev) {
     ev.preventDefault();
     gIsOn = false;
+}
+
+
+function onTouchStartSticker(ev, el, id) {
+    console.log(el);
+    ev.preventDefault();
+    var { x, y } = gDefaultLoc;
+    addSticker(x, y, el);
+    drawImg(el, x, y)
 }
 
 
@@ -354,7 +359,7 @@ function renderSearchResult(keyword) {
         var found = img.keywords.find(Imgkeyword => Imgkeyword === keyword);
         if (found) return ` <img src="img/${img.id}.jpg" alt="" onclick="onImgClick(this,${img.id})">`
     }).join('');
-    if (!strHtmls) strHtmls = 'No images found..';
+    if (!strHtmls) strHtmls = '<h1>No result found.. Click anywhere to return!</h1>';
     document.querySelector('.search-page-container').innerHTML = strHtmls
 }
 
@@ -378,13 +383,8 @@ function addSrcListener() {
 function DragDropSticker() {
     var draggedItem;
     document.querySelector('.stickers-container').addEventListener('dragstart', function (e) {
-        toggleDragModal()
         draggedItem = e.target;
-        setTimeout(() => {
-            toggleDragModal()
-        }, 1000);
     });
-
     gCanvas.addEventListener('dragover', function (e) {
         e.preventDefault();
     });
@@ -397,6 +397,17 @@ function DragDropSticker() {
 
 }
 
-function toggleDragModal() {
-    document.querySelector('.drag-modal').classList.toggle('hide');
+function showDragModal() {
+    document.querySelector('.drag-modal').classList.remove('hide');
+}
+
+function hideDragModal() {
+    document.querySelector('.drag-modal').classList.add('hide');
+}
+
+/* Hamburger Funcs */
+
+function toggleMenu() {
+    document.body.classList.toggle('menu-open');
+    document.querySelector('.hamburger').classList.toggle('is-active');
 }
