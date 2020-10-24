@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meme Generator</title>
     <link rel="stylesheet" href="styles/hamburger.css">
-    <link rel="stylesheet" href="styles/imgfx.css">
     <link rel="stylesheet" href="styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
@@ -38,7 +37,6 @@
                 </div>
                 <div class="no-result-container"></div>
                 <div class="keywords-container hide">
-                    <p>funny comics dogs books <a href="#"> more..</a></p>
                 </div>
             </div>
         </div>
@@ -46,10 +44,6 @@
         <div class="search-page-container hide"></div>
         <div class="editor-container main-container hide">
             <div class="canvas-container">
-                <div class="drag-modal hide">
-                    <h3>Drag Me Here!</h3>
-                    <img src="img/arrow.gif" alt="" srcset="">
-                </div>
                 <canvas id="my-canvas" height="540" width="540" onmousedown="onMouseDown(event)"
                     onmouseup="onMouseUp(event)" onmousemove="onMouseMove(event)" ontouchstart="onTouchStart(event)"
                     ontouchmove="onTouchMove(event)" ontouchend="onTouchEnd(event)"></canvas>
@@ -67,9 +61,9 @@
                             class="icon"></button>
                 </div>
                 <div class="txt-size-alings-container">
-                    <button class="text-increase-btn" onclick="onTxtSizeChange(10)"><img src="img/icons/decrease.png"
+                    <button class="text-increase-btn" onclick="onTxtSizeChange(10)"><img src="img/icons/increase.png"
                             alt="" class="icon"></button>
-                    <button class="text-decrease-btn" onclick="onTxtSizeChange(-10)"><img src="img/icons/increase.png"
+                    <button class="text-decrease-btn" onclick="onTxtSizeChange(-10)"><img src="img/icons/decrease.png"
                             alt="" class="icon"></button>
                             <button onclick="onAlignChange('left')"><img src="img/icons/left.png" alt="" class="icon"></button>
                             <button onclick="onAlignChange('center')"><img src="img/icons/center.png" alt=""
@@ -89,19 +83,10 @@
                             <input type="color" id="color-picker" class="color-input" onchange="onFillColorChange(this.value)">
                         </label>
                     </span>
-                    <button onclick="onMoveBtnClick()"><img src="img/icons/move.png" alt="" class="icon"></button>
-                </div>
-                <div class="move-container hide">
-                    <button class="text-left-btn" onclick="onLocChange('left',-10)">←</button>
-                    <button class="text-right-btn" onclick="onLocChange('right',10)">→</button>
-                    <button class="text-up-btn" onclick="onLocChange('up',-10)">↑</button>
-                    <button class="text-down-btn" onclick="onLocChange('down',10)">↓</button>
                 </div>
                 <div class="stickers-container"></div>
                 <div class="share-container">
                     <button class="save-btn" onclick="onSave()"><img src="img/icons/save.png" alt=""
-                            class="icon"></button>
-                    <button class="share-btn" onclick="onShare()"><img src="img/icons/share.png" alt=""
                             class="icon"></button>
                     <button class="download-btn">
                         <a href="#" onclick="onDownload(this)" download="my-img.jpg"><img src="img/icons/download.png"
@@ -116,7 +101,7 @@
     </div>
     <footer>
         <div class="footer-container container"><img src="img/logo.png" alt="">
-            <span>all rights reserved 2020</span>
+            <span>All rights reserved 2020 © | Icons from <a href="http://icons8.com">Icons8</a></span>
         </div>
     </footer>
 

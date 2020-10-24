@@ -37,7 +37,7 @@ function renderCanvas() {
     img.src = selectedImg;
     img.onload = () => {
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
-        drawTxt();
+        renderCanvasTxt();
         drawStickers();
     }
 }
@@ -45,7 +45,7 @@ function renderCanvas() {
 function renderGallery() {
     var strHtmls = getImgs().map(img => {
         return `
-        <img src="img/${img.id}.jpg" alt="" onclick="onImgClick(this,${img.id})" class="btn">`;
+        <div class="gallery-img-container"><img src="img/${img.id}.jpg" alt="" onclick="onImgClick(this,${img.id})" class="btn"></div>`;
     }).join('');
     document.querySelector('.gallery-container').innerHTML = strHtmls;
 }
@@ -163,7 +163,6 @@ function onAddTxt() {
 }
 
 function onRemove() {
-    // prepare in the near future for other sort of removals.
     removeLine();
     renderCanvas();
 }
@@ -198,10 +197,10 @@ function onLocChange(dir, diff) {
 
 /** Draws **/
 
-function drawTxt() {
+function renderCanvasTxt() {
     var lines = getLines();
     lines.forEach(line => {
-        drawText(line.txt, line.x, line.y, line.font, line.size, line.lineW, line.strokeColor, line.fillColor, line.align);
+        drawText(line);
         if (line.isFocus) {
             drawRectAroundTxt(line.x, line.y)
         }
@@ -258,15 +257,16 @@ function drawImgFromUrl(imgUrl, x, y) {
 }
 
 
-function drawText(text, x, y, font = defaultFont, size = defaultFontSize, lineW = 2, strokeColor = 'black', FillColor = 'white', txtAlign = 'center') {
-    gCtx.strokeStyle = strokeColor;
-    gCtx.fillStyle = FillColor;
-    gCtx.lineWidth = lineW;
-    gCtx.font = `${size}px ${font}`;
-    gCtx.textAlign = txtAlign;
-    gCtx.fillText(text, x, y);
-    gCtx.strokeText(text, x, y);
+function drawText(line) {
+    gCtx.strokeStyle = line.strokeColor;
+    gCtx.fillStyle = line.fillColor;
+    gCtx.lineWidth = line.lineW;
+    gCtx.font = `${line.size}px ${line.font}`;
+    gCtx.textAlign = line.align;
+    gCtx.fillText(line.txt, line.x, line.y);
+    gCtx.strokeText(line.txt, line.x, line.y);
 }
+
 
 
 function drawLine(x, y, xEnd = 250, yEnd = 250) {
@@ -345,8 +345,7 @@ function onTouchEnd(ev) {
 }
 
 
-function onTouchStartSticker(ev, el, id) {
-    console.log(el);
+function onTouchStartSticker(ev, el) {
     ev.preventDefault();
     var { x, y } = gDefaultLoc;
     addSticker(x, y, el);

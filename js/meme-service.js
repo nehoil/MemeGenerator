@@ -176,7 +176,6 @@ function drawRectAroundTxt(x, y) {
 }
 
 function isOnItem(x, y) {
-    // console.log(x);
     var locs = gMeme.lines.map((line, idx) => {
         var txtMeasure = gCtx.measureText(line.txt);
         var txtWidth = txtMeasure.width;
@@ -211,9 +210,7 @@ function saveMeme(img) {
 
 function removeFocus(){
     gMeme.lines.forEach(line => line.isFocus = false)
-    console.log(gMeme.lines);
 }
-
 
 function moveItem(x, y) {
     var found = gMeme.lines.find(line => line.gid === gMeme.selectedItemGid);
@@ -278,7 +275,6 @@ function changeSelectedIdx(){
 function alignChange(lgn) {
     var line = gMeme.lines[gMeme.selectedLineIdx]
     var txtWidth = gCtx.measureText(line.txt).width;
-    console.log(txtWidth);
     if (lgn === 'left') line.x = 0 + txtWidth / 2;
     if (lgn === 'right') line.x = gCanvas.width - txtWidth / 2;
     if (lgn === 'center') line.x = gCanvas.width / 2;
