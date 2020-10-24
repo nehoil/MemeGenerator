@@ -65,7 +65,7 @@ button {
 /* Header */
 
 header {
-  background-color: rgb(26, 188, 156);
+  background-color: rgba(26, 188, 156, 0.795);
   height: 98px;
   font-size: 1rem;
   color: #ffffff;
@@ -354,7 +354,7 @@ footer {
   width: 100%;
   height: 207px;
   margin: auto;
-  background-color: rgb(26, 188, 156);
+  background-color: rgba(26, 188, 156, 0.747);
 }
 
 .footer-container {
@@ -375,6 +375,24 @@ footer {
 
 .footer-container  a{
   color: #e1e0e0;
+}
+
+
+/* fade-in img */
+
+
+.overlay {
+  position: absolute;
+  padding: 100px;
+  opacity: 0;
+  visibility: hidden;
+  transition: .5s ease;
+  background-color: #008CBA;
+}
+
+.gallery-img-container img:hover :first-of-type .overlay {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Helpers */

@@ -45,7 +45,8 @@ function renderCanvas() {
 function renderGallery() {
     var strHtmls = getImgs().map(img => {
         return `
-        <div class="gallery-img-container"><img src="img/${img.id}.jpg" alt="" onclick="onImgClick(this,${img.id})" class="btn"></div>`;
+        <div class="gallery-img-container">
+        <img src="img/${img.id}.jpg" alt="" onclick="onImgClick(this,${img.id})" class="btn"></div>`;
     }).join('');
     document.querySelector('.gallery-container').innerHTML = strHtmls;
 }
@@ -103,7 +104,6 @@ function onDownloadMeme(elLink, id) {
 
 function onDownload(elLink) {
     removeFocus();
-    renderCanvas();
     renderCanvas();
     var imgContent = gCanvas.toDataURL('image/jpeg');
     elLink.href = imgContent;
