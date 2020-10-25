@@ -1,3 +1,7 @@
+// CR QTS:
+// 1. How to render the img after img.load accure so will not render selected frame.
+// 2. Mobile menu top margin issue.
+
 'use strict';
 
 var gCanvas;
@@ -24,10 +28,17 @@ function init() {
     createDefaultLines();
     addSrcListener();
     renderStickers();
-    DragDropSticker();
+    DragDropSticker()
+    renderKeywords();
+    window.addEventListener('resize', function () {
+        resizeCanvas()
+    })
 }
 
-
+function makeInputActive() {
+    document.getElementById("myText").focus();
+    document.getElementById("myText").value = '';
+}
 
 /** Render Funcs **/
 
@@ -41,6 +52,7 @@ function renderCanvas() {
         drawStickers();
     }
 }
+
 
 function renderGallery() {
     var strHtmls = getImgs().map(img => {
@@ -72,6 +84,18 @@ function renderStickers() {
     document.querySelector('.stickers-container').innerHTML = strHtmls
 }
 
+function renderKeywords() {
+    var keywords = getKeywords();
+    var strHtmls = '';
+    for (const keyword in keywords) {
+        if (keywords.hasOwnProperty(keyword)) {
+            const currKeyStr = keywords[keyword];
+            strHtmls += `<a onclick="onSearch('${keyword}')">${keyword}`;
+        }
+    }
+    document.querySelector('.keywords-container').innerHTML = strHtmls;
+}
+
 
 function resizeCanvas() {
     var elContainer = document.querySelector('.canvas-container');
@@ -85,7 +109,7 @@ function resizeCanvas() {
 
 /** On Funcs **/
 
-function onMoveBtnClick(){
+function onMoveBtnClick() {
     document.querySelector('.move-container').classList.toggle('hide');
 }
 
@@ -101,6 +125,7 @@ function onDownloadMeme(elLink, id) {
     var memeImg = gUserMemes.find(meme => meme.id === id).img
     elLink.href = memeImg;
 }
+
 
 function onDownload(elLink) {
     removeFocus();
@@ -354,6 +379,7 @@ function onTouchStartSticker(ev, el) {
 
 
 /* Search Funcs */
+
 
 function renderSearchResult(keyword) {
     var imgs = getMemsImgs()

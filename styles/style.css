@@ -10,14 +10,13 @@ html {
 }
 
 body {
-  background-color: #e3e3e3;
   font-size: 0.875rem;
   margin: 0;
   font-family: "Roboto", sans-serif;
 }
 
 select {
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.295);
   border-radius: 10px;
   padding: 20px;
 }
@@ -46,7 +45,7 @@ p {
 
 button {
   border-radius: 10px;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.295);
   background-color: white;
   padding: 20px;
   cursor: pointer;
@@ -57,6 +56,7 @@ button {
 /* Layout */
 
 .main-container {
+  padding: 0 10px;
   max-width: 1100px;
   height: 100%;
   margin: 0 10px;
@@ -65,17 +65,19 @@ button {
 /* Header */
 
 header {
-  background-color: rgba(26, 188, 156, 0.795);
   height: 98px;
   font-size: 1rem;
   color: #ffffff;
   position: sticky;
   z-index: 99;
   top: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 19px 1px rgba(0, 0, 0, 0.185);
 }
 
 .logo {
   cursor: pointer;
+  position: relative;
 }
 
 .hamburger {
@@ -83,6 +85,7 @@ header {
 }
 
 .main-nav {
+  height: 100%;
   text-align: center;
   margin: auto;
   display: flex;
@@ -104,7 +107,7 @@ body.menu-open .main-nav ul {
   height: 100%;
   display: flex;
   flex-direction: column;
-  top: 11%;
+  top: 53px;
   opacity: 0;
   transform: translateY(-125%);
 }
@@ -139,14 +142,13 @@ body.menu-open .main-nav ul {
 
 .search-header {
   background-color: rgb(255, 255, 255);
-  height: 80px;
   margin-bottom: 26px;
 }
 
 .search-container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .search-content {
@@ -158,18 +160,24 @@ body.menu-open .main-nav ul {
   justify-content: space-between;
 }
 
-.keywords-container {
-  padding-bottom: 10px;
+.keywords-container a {
+  font-size: 0.7rem;
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 12px;
+  padding: 2px;
 }
 .search-header input {
-  border: none;
-  border-bottom: 1px solid black;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 30px;
+  border: 1px solid rgb(221, 221, 221);
   outline: none;
   background: url("../img/search-icon.png") no-repeat right center;
-  padding: 0 0;
+  padding: 10px 10px;
   height: 50px;
 }
-.search-header a {
+
+.search-header > a {
   border-bottom: 1px solid black;
   margin-inline-start: 5px;
 }
@@ -211,43 +219,60 @@ body.menu-open .main-nav ul {
 .stickers-container {
   background-color: #fff;
   border-radius: 10px;
-  width: 100%;
+  width: 95%;
   margin: 10px auto;
+  border: 1px solid rgb(221, 221, 221)
 }
 
 .controls-container {
-  max-width: 373px;
+  max-width: 400px;
   width: 70%;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
 }
+
+/* .controls-container div {
+  max-width: 350px;
+} */
 
 .move-container {
   display: none!important;
 }
 
 .font-color-w-container {
+  width: 95%;
+  margin: auto;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .font-color-w-container input {
+  flex-grow: 2;
   opacity: 0;
   position: fixed;
 }
 
 .font-color-w-container select {
-  padding: 22px 30px;
+  flex-grow: 6;
+  margin-right: 4px;
+  height: 63px;
 }
 
 .text-input-container input {
+  margin-top: 10px;
+  margin-bottom: 5px;
   border-radius: 10px;
-  width: 100%;
+  width: 95%;
   padding: 20px;
   outline: none;
-  border: none;
-  margin: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.295);
 }
 
 .editor-container {
@@ -276,13 +301,21 @@ canvas {
   border: 1px solid grey;
 }
 .share-container {
-  width: 100%;
+  width: 95%;
   display: flex;
+  justify-content: center;
+  margin: auto;
+  margin-bottom: 10px;
 }
 
 .share-container button {
   flex-grow: 1;
 }
+
+.share-container form {
+display: flex;
+}
+
 
 /* Memes Container */
 
@@ -297,6 +330,7 @@ canvas {
 }
 
 .memes-container img {
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
   object-fit: cover;
   width: 100%;
   height: 100%;
@@ -317,9 +351,10 @@ canvas {
 
 .search-page-container > img {
   object-fit: cover;
-  z-index: -1;
+  z-index: 1;
   width: 100%;
   height: 100%;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
 }
 
 .search-page-container img {
@@ -344,6 +379,8 @@ canvas {
   width: 100%;
   height: 100%;
   cursor: pointer;
+  border-radius: 16px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
 }
 
 .gallery-container .gallery-img-container > img:hover {
@@ -354,12 +391,16 @@ filter: brightness(120%);
 /* Footer */
 
 footer {
+  border-top: 1px solid #DDDDDD !important;
+  border-top-width: 1px !important;
+  border-top-style: solid !important;
+  border-top-color: rgb(221, 221, 221) !important;
   position: relative;
   bottom: 0;
   width: 100%;
   height: 207px;
   margin: auto;
-  background-color: rgba(26, 188, 156, 0.747);
+  background-color: #F7F7F7;
 }
 
 .footer-container {
@@ -371,7 +412,7 @@ footer {
   display: flex;
   align-items: center;
   flex-direction: column;
-  color: #ffffff;
+  color: rgb(26, 188, 156);
 }
 
 .footer-container img {
@@ -476,6 +517,12 @@ footer {
     width: 540px;
     height: 540px;
   }
+  .keywords-container a {
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 12px;
+    padding: 10px;
+    margin-inline-end: 5px;
+  }
 }
 
 /* Extra Narrow */
@@ -504,8 +551,12 @@ footer {
     width: 100%;
   }
   .font-color-w-container select {
-    padding: 22px 70px;
+    padding-left: 100px;
+    padding-right: 100px;
+    margin-right: 4px;
+    height: 63px;
   }
+  
 }
 
 /* Narrow */
@@ -537,7 +588,11 @@ footer {
     justify-content: space-between;
   }
   .search-header input {
-    padding: 5px 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border-radius: 20px;
+    border: 1px solid rgb(221, 221, 221);
+    padding: 10px 10px;
   }
   .keywords-container {
     padding-bottom: 0;
@@ -557,11 +612,11 @@ footer {
     background-color: none;
   }
   .main-nav li {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     padding-inline-start: 10px;
     width: inherit;
     background-color: unset;
-    color: #ffffff;
+    color: #1abc9c;
     cursor: pointer;
   }
   .main-nav li:not(:first-child) {
@@ -573,6 +628,11 @@ footer {
   .canvas-container {
     width: 540px;
     height: 540px;
+  }
+  .search-container {
+    display: flex;
+    align-items: center;
+    justify-content: unset;
   }
 }
 

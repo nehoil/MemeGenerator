@@ -42,7 +42,7 @@ var gImgs = [
         id: 7, url: 'img/7.jpg', keywords: ['baby', 'funny']
     },
     {
-        id: 8, url: 'img/8.jpg', keywords: ['funny']
+        id: 8, url: 'img/8.jpg', keywords: ['funny', 'happy']
     },
     {
         id: 9, url: 'img/9.jpg', keywords: ['kid', 'funny']
@@ -127,6 +127,10 @@ function getMemsImgs(){
 
 function getStickersToPanel(){
     return gStickers;
+}
+
+function getKeywords(){
+    return gKeywords;
 }
 
 function getStickers(){
@@ -215,6 +219,7 @@ function removeFocus(){
 function moveItem(x, y) {
     var found = gMeme.lines.find(line => line.gid === gMeme.selectedItemGid);
     if (found) {
+        makeInputActive()
         found.x = x
         found.y = y
         changeSelectedIdx();
