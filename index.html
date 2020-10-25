@@ -41,15 +41,12 @@
         </div>
         <div class="memes-container hide"></div>
         <div class="search-page-container hide"></div>
-        <div class="editor-container main-container">
+        <div class="editor-container main-container hide">
             <div class="canvas-container">
                 <canvas id="my-canvas" height="540" width="540" onmousedown="onMouseDown(event)"
                     onmouseup="onMouseUp(event)" onmousemove="onMouseMove(event)" ontouchstart="onTouchStart(event)"
                     ontouchmove="onTouchMove(event)" ontouchend="onTouchEnd(event)"></canvas>
             </div>
-            <div class="alert hide" role="alert">
-                Saved successfully!
-              </div>
             <div class="controls-container">
                 <div class="text-input-container">
                     <input type="text" class="text-input" id="myText" placeholder="Your Text"
@@ -102,6 +99,9 @@
                         <button class="btn" type="submit"><img src="img/icons/share.png" class="icon" alt="" srcset=""></button>
                         <div class="share-container"></div>
                       </form>
+                      <div class="alert hide" role="alert">
+                        Saved successfully!
+                      </div>
                 </div>
             </div>
         </div>

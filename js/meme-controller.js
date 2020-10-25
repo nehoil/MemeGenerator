@@ -138,7 +138,11 @@ function onSave() {
     removeFocus();
     renderCanvas();
     var imgContent = gCanvas.toDataURL('image/jpeg');
-    saveMeme(imgContent)
+    saveMeme(imgContent);
+    document.querySelector('.alert').classList.remove('hide')
+    setTimeout(() => {
+        document.querySelector('.alert').classList.add('smoth-hide')
+    }, 2000);
 }
 
 function onGalleryClick() {
